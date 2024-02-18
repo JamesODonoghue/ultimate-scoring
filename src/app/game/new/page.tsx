@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { api } from "~/trpc/react";
+// import { api } from "~/trpc/react";
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Team name must be at least 2 characters.",
@@ -32,11 +32,12 @@ export default function NewGame() {
       name: "",
     },
   });
-  const { mutate } = api.game.create.useMutation();
+  //   const { mutate } = api.game.create.useMutation();
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     // mutate({ name: values.name });
+    console.log(values);
   }
   return (
     <div className="mx-auto max-w-3xl">

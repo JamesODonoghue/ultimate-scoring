@@ -7,14 +7,14 @@
  * need to use are documented accordingly near the end.
  */
 import {
-  SignedInAuthObject,
-  SignedOutAuthObject,
+  type SignedInAuthObject,
+  type SignedOutAuthObject,
   getAuth,
 } from "@clerk/nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import * as trpcNext from "@trpc/server/adapters/next";
+import type * as trpcNext from "@trpc/server/adapters/next";
 
 import { db } from "~/server/db";
 
