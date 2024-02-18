@@ -19,25 +19,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-// import { api } from "~/trpc/react";
+import { api } from "~/trpc/react";
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Team name must be at least 2 characters.",
-  }),
+  homeTeamId: z.string(),
+  awayTeamId: z.string(),
 });
 export default function NewGame() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      homeTeamId: "",
     },
   });
+
+  const { data } = api.team.getAll.useQuery();
+  const { mutate } = api.game.create.useMutation();
   //   const { mutate } = api.game.create.useMutation();
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    // mutate({ name: values.name });
-    console.log(values);
+    mutate({ homeTeamId: values.homeTeamId, awayTeamId: values.awayTeamId });
   }
   return (
     <div className="mx-auto max-w-3xl">
@@ -46,7 +47,7 @@ export default function NewGame() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
-            name="name"
+            name="homeTeamId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Home Team</FormLabel>
@@ -56,16 +57,50 @@ export default function NewGame() {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
+                      <SelectValue placeholder="Select a team" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="m@example.com">m@example.com</SelectItem>
+                    {data?.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                    {/* <SelectItem value="m@example.com">m@example.com</SelectItem>
                     <SelectItem value="m@google.com">m@google.com</SelectItem>
-                    <SelectItem value="m@support.com">m@support.com</SelectItem>
+                    <SelectItem value="m@support.com">m@support.com</SelectItem> */}
                   </SelectContent>
                 </Select>
-                <FormDescription>This is the team name</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          ></FormField>
+          <FormField
+            control={form.control}
+            name="awayTeamId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Away Team</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a team" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {data?.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
+                    {/* <SelectItem value="m@example.com">m@example.com</SelectItem>
+                    <SelectItem value="m@google.com">m@google.com</SelectItem>
+                    <SelectItem value="m@support.com">m@support.com</SelectItem> */}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
