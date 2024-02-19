@@ -10,24 +10,28 @@ import {
   type SignedInAuthObject,
   type SignedOutAuthObject,
   getAuth,
+  AuthObject,
 } from "@clerk/nextjs/server";
 import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import type * as trpcNext from "@trpc/server/adapters/next";
-
 import { db } from "~/server/db";
+import { RequestLike } from "node_modules/@clerk/nextjs/dist/types/server/types";
+import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
 interface AuthContext {
   auth: SignedInAuthObject | SignedOutAuthObject;
 }
 
-export const createContextInner = async ({ auth }: AuthContext) => {
-  return {
-    db,
-    auth,
-  };
-};
+// export const createContextInner = async ({ auth }: AuthContext) => {
+//   console.log("create context inner");
+//   console.log("auth: ", auth);
+//   return {
+//     db,
+//     auth,
+//   };
+// };
 
 /**
  * 1. CONTEXT
@@ -41,15 +45,43 @@ export const createContextInner = async ({ auth }: AuthContext) => {
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (
-  _opts: trpcNext.CreateNextContextOptions,
-) => {
-  return await createContextInner({ auth: getAuth(_opts.req) });
-  // return {
-  //   db,
-  //   auth: getAuth(_opts.req),
-  //   ...opts,
-  // };
+// export const createTRPCContext = async (
+//   _opts: trpcNext.CreateNextContextOptions,
+// ) => {
+//   console.log("create trpc context");
+//   console.log("opts req: ", _opts.req);
+//   return await createContextInner({ auth: getAuth(_opts.req) });
+// };
+
+// export const createTRPCContext = async (opts: {
+//   headers: Headers;
+//   req: RequestLike;
+// }) => {
+//   return {
+//     db,
+//     auth: getAuth(opts.req),
+//     ...opts,
+//   };
+// };
+// const createInnerTRPCContext = ({ auth }: AuthContext) => {
+//   return {
+//     auth,
+//     db,
+//   };
+// };
+
+// export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+//   return createInnerTRPCContext({ auth: getAuth(opts.req) });
+// };
+
+export const createTRPCContext = async (opts: {
+  headers: Headers;
+  auth: AuthObject;
+}) => {
+  return {
+    db,
+    ...opts,
+  };
 };
 
 /**

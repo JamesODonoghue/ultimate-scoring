@@ -20,6 +20,15 @@ export const gameRouter = createTRPCRouter({
       return game;
     }),
   getAll: publicProcedure.query(({ ctx }) => {
+    console.log("get all");
     return ctx.db.game.findMany();
   }),
+  getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ ctx, input: { id } }) =>
+      ctx.db.game.findUnique({
+        where: { id },
+        include: { homeTeam: true, awayTeam: true },
+      }),
+    ),
 });

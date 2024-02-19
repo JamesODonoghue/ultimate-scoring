@@ -24,6 +24,11 @@ export default function Navbar() {
                 Create New Team
               </NavigationMenuLink>
             </Link>
+            <Link href="/games" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Games
+              </NavigationMenuLink>
+            </Link>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>

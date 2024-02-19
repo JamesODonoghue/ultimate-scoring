@@ -31,7 +31,6 @@ export default function NewTeam() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    debugger;
     mutate({ name: values.name });
   }
   return (

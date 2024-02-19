@@ -1,3 +1,4 @@
+import { getAuth } from "@clerk/nextjs/server";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { type NextRequest } from "next/server";
 
@@ -10,11 +11,10 @@ import { createTRPCContext } from "~/server/api/trpc";
  * handling a HTTP request (e.g. when you make requests from Client Components).
  */
 const createContext = async (req: NextRequest) => {
-  debugger;
   return createTRPCContext({
     headers: req.headers,
-    req,
-  } as never);
+    auth: getAuth(req),
+  });
 };
 
 const handler = (req: NextRequest) =>
