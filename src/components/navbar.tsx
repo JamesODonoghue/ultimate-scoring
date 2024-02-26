@@ -1,37 +1,21 @@
 "use client";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from "~/components/ui/navigation-menu";
+import { navigationMenuTriggerStyle } from "~/components/ui/navigation-menu";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 export default function Navbar() {
   return (
-    <div className="mx-auto flex max-w-xl items-center justify-between p-4">
-      <NavigationMenu>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <Link href="/game/new" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Create New Game
-              </NavigationMenuLink>
-            </Link>
-            <Link href="/team/new" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Create New Team
-              </NavigationMenuLink>
-            </Link>
-            <Link href="/games" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Games
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </NavigationMenu>
+    <div className="mx-auto flex max-w-xl items-start justify-between p-4">
+      <div className="flex gap-4">
+        <Link href="/game/new" className={navigationMenuTriggerStyle()}>
+          Create new game
+        </Link>
+        <Link href="/team/new" className={navigationMenuTriggerStyle()}>
+          Create new team
+        </Link>
+        <Link href="/games" className={navigationMenuTriggerStyle()}>
+          View games
+        </Link>
+      </div>
       <UserButton />
     </div>
   );
