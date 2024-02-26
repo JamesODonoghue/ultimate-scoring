@@ -1,4 +1,5 @@
 import "~/styles/globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Inter } from "next/font/google";
 
@@ -24,6 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
+      <SpeedInsights />
       <TRPCReactProvider>
         <html lang="en">
           <body className={`dark font-sans ${inter.variable} gap-8`}>
