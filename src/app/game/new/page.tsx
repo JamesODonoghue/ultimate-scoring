@@ -21,7 +21,8 @@ import {
 import { api } from "~/trpc/react";
 import { createGame } from "./_actions";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { useFormState, useFormStatus } from "react-dom";
+import { Loader2 } from "lucide-react";
+import { useFormCustom } from "~/hooks/useForm";
 const formSchema = z.object({
   homeTeamId: z.string(),
   awayTeamId: z.string(),
@@ -39,7 +40,11 @@ export default function NewGame() {
     homeTeamId: form.getValues().homeTeamId,
     awayTeamId: form.getValues().awayTeamId,
   });
-  const { pending } = useFormStatus();
+  const { isPending, formAction, onSubmit } = useFormCustom(
+    createGameWithForm,
+    null,
+  );
+
   return (
     <div className="mx-auto max-w-xl p-4">
       <Card>
@@ -48,7 +53,11 @@ export default function NewGame() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="flex flex-col gap-6" action={createGameWithForm}>
+            <form
+              className="flex flex-col gap-6"
+              action={formAction}
+              onSubmit={onSubmit}
+            >
               <FormField
                 control={form.control}
                 name="homeTeamId"
@@ -103,12 +112,19 @@ export default function NewGame() {
                   </FormItem>
                 )}
               ></FormField>
-              <Button
-                disabled={!form.formState.isValid || !form.formState.isDirty}
-                type="submit"
-              >
-                Create new game
-              </Button>
+              {!isPending ? (
+                <Button
+                  disabled={!form.formState.isValid || !form.formState.isDirty}
+                  type="submit"
+                >
+                  Create new game
+                </Button>
+              ) : (
+                <Button disabled>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating...
+                </Button>
+              )}
             </form>
           </Form>
         </CardContent>
