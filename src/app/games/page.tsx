@@ -12,6 +12,7 @@ export default async function Games() {
   });
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-8 p-4">
+      {!response.length && <div>No games</div>}
       {response.map(({ id, homeTeam, awayTeam, createdAt }) => (
         <Link href={`games/${id}`} key={id}>
           <Card>
