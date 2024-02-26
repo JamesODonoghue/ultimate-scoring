@@ -10,7 +10,7 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 export default function Navbar() {
   return (
-    <div className="mx-auto flex max-w-xl items-center justify-between">
+    <div className="mx-auto flex max-w-xl items-center justify-between p-4">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>

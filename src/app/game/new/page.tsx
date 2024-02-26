@@ -39,7 +39,7 @@ export default function NewGame() {
     awayTeamId: form.getValues().awayTeamId,
   });
   return (
-    <div className="mx-auto max-w-xl">
+    <div className="mx-auto max-w-xl p-4">
       <Card>
         <CardHeader>
           <CardTitle>New Game</CardTitle>

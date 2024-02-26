@@ -11,7 +11,7 @@ export default async function Games() {
     include: { homeTeam: true, awayTeam: true },
   });
   return (
-    <div className="mx-auto flex max-w-xl flex-col gap-8">
+    <div className="mx-auto flex max-w-xl flex-col gap-8 p-4">
       {response.map(({ id, homeTeam, awayTeam, createdAt }) => (
         <Link href={`games/${id}`} key={id}>
           <Card>

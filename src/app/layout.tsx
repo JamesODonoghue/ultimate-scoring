@@ -26,10 +26,8 @@ export default function RootLayout({
     <ClerkProvider>
       <TRPCReactProvider>
         <html lang="en">
-          <body className={`dark font-sans ${inter.variable} gap-8 p-4`}>
-            <div className="mb-8">
-              <Navbar></Navbar>
-            </div>
+          <body className={`dark font-sans ${inter.variable} gap-8`}>
+            <Navbar></Navbar>
             {children}
           </body>
         </html>
