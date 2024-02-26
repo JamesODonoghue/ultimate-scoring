@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { db } from "~/server/db";
 
 export async function createTeam(formData: FormData) {
@@ -7,8 +8,8 @@ export async function createTeam(formData: FormData) {
   if (!teamName) {
     throw new Error("Team name must be defined");
   }
-  const response = await db.team.create({
+  await db.team.create({
     data: { name: teamName },
   });
-  return response;
+  redirect(`/game/new`);
 }

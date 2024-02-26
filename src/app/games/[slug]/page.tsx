@@ -15,12 +15,10 @@ export default async function Game({ params }: { params: { slug: string } }) {
     awayTeam: { name: awayTeamName },
   } = response;
   return (
-    <div className="mx-auto max-w-3xl">
-      <ScoreCounter
-        {...response}
-        homeTeam={homeTeamName}
-        awayTeam={awayTeamName}
-      />
-    </div>
+    <ScoreCounter
+      {...response}
+      homeTeam={homeTeamName}
+      awayTeam={awayTeamName}
+    />
   );
 }

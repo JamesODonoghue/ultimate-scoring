@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { createTeam } from "./_actions";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 const formSchema = z.object({
   teamName: z.string().min(2, {
@@ -28,26 +29,32 @@ export default function NewTeam() {
     },
   });
   return (
-    <div className="mx-auto max-w-3xl">
-      <div className="text-4xl">New Team</div>
-      <Form {...form}>
-        <form action={createTeam}>
-          <FormField
-            control={form.control}
-            name="teamName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Team Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="alameda taurus" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          ></FormField>
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
+    <div className="mx-auto max-w-xl">
+      <Card>
+        <CardHeader>
+          <CardTitle>New Team</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form className="flex flex-col gap-6" action={createTeam}>
+              <FormField
+                control={form.control}
+                name="teamName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="alameda taurus" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              ></FormField>
+              <Button type="submit">Create new team</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,14 +1,28 @@
 "use server";
 
+import { currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { db } from "~/server/db";
 
-export async function createGame(formData: FormData) {
-  const teamName = formData.get("teamName") as string;
-  if (!teamName) {
-    throw new Error("Team name must be defined");
+export async function createGame(formData: {
+  homeTeamId: string;
+  awayTeamId: string;
+}) {
+  const { homeTeamId, awayTeamId } = formData;
+  if (!homeTeamId) {
+    throw new Error("Home team must be defined");
   }
-  const response = await db.team.create({
-    data: { name: teamName },
+  if (!awayTeamId) {
+    throw new Error("Home team must be defined");
+  }
+  const user = await currentUser();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+  const { id } = await db.game.create({
+    data: { homeTeamId, awayTeamId, createdBy: user.id },
   });
-  return response;
+  revalidatePath("games");
+  redirect(`/games/${id}`);
 }

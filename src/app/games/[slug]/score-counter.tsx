@@ -28,7 +28,7 @@ export default function ScoreCounter({
   const [localAwayTeamScore, setAwayTeamScore] =
     useState<number>(awayTeamScore);
   return (
-    <div className="flex flex-col gap-8">
+    <div className=" mx-auto flex max-w-xl flex-col gap-8">
       <Card>
         <CardHeader>
           <CardTitle>{homeTeam}</CardTitle>

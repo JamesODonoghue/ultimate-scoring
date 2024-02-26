@@ -1,13 +1,27 @@
 import Link from "next/link";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { db } from "~/server/db";
 export default async function Games() {
-  const response = await db.game.findMany();
+  const response = await db.game.findMany({
+    include: { homeTeam: true, awayTeam: true },
+  });
   return (
-    <div>
-      <div className="text-xl">Games</div>
-      {response.map((item) => (
-        <Link href={`games/${item.id}`} key={item.id}>
-          {item.id}
+    <div className="mx-auto flex max-w-xl flex-col gap-8">
+      {response.map(({ id, homeTeam, awayTeam, createdAt }) => (
+        <Link href={`games/${id}`} key={id}>
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {homeTeam.name} vs {awayTeam.name}
+              </CardTitle>
+              <CardDescription>{createdAt.toLocaleString()}</CardDescription>
+            </CardHeader>
+          </Card>
         </Link>
       ))}
     </div>
