@@ -47,7 +47,7 @@ export default function NewTeam() {
                   <FormItem>
                     <FormLabel>Team Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="alameda taurus" {...field} />
+                      <Input placeholder="Taurus" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
