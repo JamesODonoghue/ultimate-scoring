@@ -19,7 +19,9 @@ export default async function Games() {
               <CardTitle>
                 {homeTeam.name} vs {awayTeam.name}
               </CardTitle>
-              <CardDescription>{createdAt.toLocaleString()}</CardDescription>
+              <CardDescription>
+                {createdAt.toLocaleString("en-us")}
+              </CardDescription>
             </CardHeader>
           </Card>
         </Link>
