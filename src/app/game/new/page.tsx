@@ -21,6 +21,7 @@ import {
 import { api } from "~/trpc/react";
 import { createGame } from "./_actions";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { useFormState, useFormStatus } from "react-dom";
 const formSchema = z.object({
   homeTeamId: z.string(),
   awayTeamId: z.string(),
@@ -38,6 +39,7 @@ export default function NewGame() {
     homeTeamId: form.getValues().homeTeamId,
     awayTeamId: form.getValues().awayTeamId,
   });
+  const { pending } = useFormStatus();
   return (
     <div className="mx-auto max-w-xl p-4">
       <Card>
@@ -101,7 +103,12 @@ export default function NewGame() {
                   </FormItem>
                 )}
               ></FormField>
-              <Button type="submit">Create new game</Button>
+              <Button
+                disabled={!form.formState.isValid || !form.formState.isDirty}
+                type="submit"
+              >
+                Create new game
+              </Button>
             </form>
           </Form>
         </CardContent>

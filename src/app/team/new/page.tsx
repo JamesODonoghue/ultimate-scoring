@@ -28,6 +28,9 @@ export default function NewTeam() {
       teamName: "",
     },
   });
+  const {
+    formState: { isDirty, isValid },
+  } = form;
   return (
     <div className="mx-auto max-w-xl p-4">
       <Card>
@@ -50,7 +53,9 @@ export default function NewTeam() {
                   </FormItem>
                 )}
               ></FormField>
-              <Button type="submit">Create new team</Button>
+              <Button disabled={!isDirty || !isValid} type="submit">
+                Create new team
+              </Button>
             </form>
           </Form>
         </CardContent>
