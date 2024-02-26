@@ -20,7 +20,9 @@ export default async function Games() {
                 {homeTeam.name} vs {awayTeam.name}
               </CardTitle>
               <CardDescription>
-                {createdAt.toLocaleString("en-us")}
+                {createdAt.toLocaleString("en-us", {
+                  timeZone: "America/Los_Angeles",
+                })}
               </CardDescription>
             </CardHeader>
           </Card>
