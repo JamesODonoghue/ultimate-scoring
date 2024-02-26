@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { api } from "~/trpc/server";
+import { db } from "~/server/db";
 export default async function Games() {
-  const response = await api.game.getAll.query();
+  const response = await db.game.findMany();
   return (
     <div>
       <div className="text-xl">Games</div>

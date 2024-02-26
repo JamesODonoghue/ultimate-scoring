@@ -19,6 +19,20 @@ export const gameRouter = createTRPCRouter({
       });
       return game;
     }),
+  update: privateProcedure
+    .input(
+      z.object({
+        homeTeamScore: z.number(),
+        awayTeamScore: z.number(),
+        id: z.string(),
+      }),
+    )
+    .mutation(({ ctx, input: { homeTeamScore, awayTeamScore, id } }) => {
+      return ctx.db.game.update({
+        where: { id },
+        data: { homeTeamScore, awayTeamScore },
+      });
+    }),
   getAll: publicProcedure.query(({ ctx }) => {
     console.log("get all");
     return ctx.db.game.findMany();

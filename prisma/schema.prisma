@@ -32,6 +32,8 @@ model Game {
     homeTeamId String
     awayTeam Team @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
     awayTeamId String
+    homeTeamScore Int @default(0)
+    awayTeamScore Int @default(0)
     @@index([homeTeamId])
     @@index([awayTeamId])
     @@index([createdBy])

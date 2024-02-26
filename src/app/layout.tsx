@@ -26,7 +26,7 @@ export default function RootLayout({
     <ClerkProvider>
       <TRPCReactProvider>
         <html lang="en">
-          <body className={`dark font-sans ${inter.variable}`}>
+          <body className={`dark font-sans ${inter.variable} p-4`}>
             <Navbar></Navbar>
             {children}
           </body>
