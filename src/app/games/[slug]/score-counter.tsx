@@ -9,6 +9,7 @@ import {
   incrementHomeTeamScore,
 } from "~/app/games/[slug]/_actions";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { useClerk, useUser } from "@clerk/nextjs";
 
 export default function ScoreCounter({
   id,
@@ -27,6 +28,13 @@ export default function ScoreCounter({
     useState<number>(homeTeamScore);
   const [localAwayTeamScore, setAwayTeamScore] =
     useState<number>(awayTeamScore);
+  const user = useUser();
+  const clerk = useClerk();
+  function handleButtonClick() {
+    if (!user.isSignedIn) {
+      clerk.openSignIn();
+    }
+  }
   return (
     <div className=" mx-auto flex max-w-xl flex-col gap-8 p-4">
       <Card>
@@ -37,6 +45,7 @@ export default function ScoreCounter({
           <div className="flex items-center justify-center gap-12 text-9xl font-bold">
             <Button
               onClick={async () => {
+                handleButtonClick();
                 setHomeTeamScore(localHomeTeamScore - 1);
                 await decrementHomeTeamScore({ id });
               }}
@@ -48,6 +57,7 @@ export default function ScoreCounter({
             <div className="w-36 text-center">{localHomeTeamScore}</div>
             <Button
               onClick={async () => {
+                handleButtonClick();
                 setHomeTeamScore(localHomeTeamScore + 1);
                 await incrementHomeTeamScore({ id });
               }}
@@ -70,6 +80,7 @@ export default function ScoreCounter({
               variant="outline"
               size="iconLarge"
               onClick={async () => {
+                handleButtonClick();
                 setAwayTeamScore(localAwayTeamScore - 1);
                 await decrementAwayTeamScore({ id });
               }}
@@ -81,6 +92,7 @@ export default function ScoreCounter({
               variant="outline"
               size="iconLarge"
               onClick={async () => {
+                handleButtonClick();
                 setAwayTeamScore(localAwayTeamScore + 1);
                 await incrementAwayTeamScore({ id });
               }}

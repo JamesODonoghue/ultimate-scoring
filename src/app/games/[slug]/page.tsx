@@ -1,5 +1,4 @@
 import ScoreCounter from "~/app/games/[slug]/score-counter";
-import { Card } from "~/components/ui/card";
 import { db } from "~/server/db";
 
 export default async function Game({ params }: { params: { slug: string } }) {

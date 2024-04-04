@@ -24,7 +24,7 @@ model Game {
     id        String      @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    createdBy String
+    createdBy String?
     homeTeam Team @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
     homeTeamId String
     awayTeam Team @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
