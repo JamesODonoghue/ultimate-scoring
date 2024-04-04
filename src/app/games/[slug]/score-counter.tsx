@@ -41,20 +41,20 @@ export default function ScoreCounter({
                 await decrementHomeTeamScore({ id });
               }}
               variant="outline"
-              size="icon"
+              size="iconLarge"
             >
-              <Minus />
+              <Minus size={36} />
             </Button>
-            <div>{localHomeTeamScore}</div>
+            <div className="w-36 text-center">{localHomeTeamScore}</div>
             <Button
               onClick={async () => {
                 setHomeTeamScore(localHomeTeamScore + 1);
                 await incrementHomeTeamScore({ id });
               }}
               variant="outline"
-              size="icon"
+              size="iconLarge"
             >
-              <Plus />
+              <Plus size={36} />
             </Button>
           </div>
         </CardContent>
@@ -68,24 +68,24 @@ export default function ScoreCounter({
           <div className="flex items-center justify-center gap-12 text-9xl font-bold">
             <Button
               variant="outline"
-              size="icon"
+              size="iconLarge"
               onClick={async () => {
                 setAwayTeamScore(localAwayTeamScore - 1);
                 await decrementAwayTeamScore({ id });
               }}
             >
-              <Minus />
+              <Minus size={36} />
             </Button>
-            <div>{localAwayTeamScore}</div>
+            <div className="w-36 text-center">{localAwayTeamScore}</div>
             <Button
               variant="outline"
-              size="icon"
+              size="iconLarge"
               onClick={async () => {
                 setAwayTeamScore(localAwayTeamScore + 1);
                 await incrementAwayTeamScore({ id });
               }}
             >
-              <Plus />
+              <Plus size={36} />
             </Button>
           </div>
         </CardContent>
