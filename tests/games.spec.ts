@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test.only("should allow user to create a game", async ({ page }) => {
+test("should allow user to create a game", async ({ page }) => {
   await page.goto("/");
   const homeTeam = page.getByLabel(/home team/i);
   await homeTeam.click();
