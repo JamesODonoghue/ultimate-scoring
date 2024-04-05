@@ -35,7 +35,7 @@ export default function NewGame() {
       awayTeamId: "",
     },
   });
-  const { data } = api.team.getAll.useQuery();
+  const { data, isFetched } = api.team.getAll.useQuery();
   const createGameWithForm = createGame.bind(null, {
     homeTeamId: form.getValues().homeTeamId,
     awayTeamId: form.getValues().awayTeamId,
@@ -52,81 +52,85 @@ export default function NewGame() {
           <CardTitle>New Game</CardTitle>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
-            <form
-              className="flex flex-col gap-6"
-              action={formAction}
-              onSubmit={onSubmit}
-            >
-              <FormField
-                control={form.control}
-                name="homeTeamId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Home Team</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a team" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
+          {isFetched && (
+            <Form {...form}>
+              <form
+                className="flex flex-col gap-6"
+                action={formAction}
+                onSubmit={onSubmit}
+              >
+                <FormField
+                  control={form.control}
+                  name="homeTeamId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Home Team</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a team" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {data?.map((item) => (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+                <FormField
+                  control={form.control}
+                  name="awayTeamId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Away Team</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a team" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {data?.map((item) => (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                ></FormField>
+                {!isPending ? (
+                  <Button
+                    disabled={
+                      !form.formState.isValid || !form.formState.isDirty
+                    }
+                    type="submit"
+                  >
+                    Create
+                  </Button>
+                ) : (
+                  <Button disabled>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </Button>
                 )}
-              ></FormField>
-              <FormField
-                control={form.control}
-                name="awayTeamId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Away Team</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a team" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {data?.map((item) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              ></FormField>
-              {!isPending ? (
-                <Button
-                  disabled={!form.formState.isValid || !form.formState.isDirty}
-                  type="submit"
-                >
-                  Create new game
-                </Button>
-              ) : (
-                <Button disabled>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
-                </Button>
-              )}
-            </form>
-          </Form>
+              </form>
+            </Form>
+          )}
         </CardContent>
       </Card>
     </div>
