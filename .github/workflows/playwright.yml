@@ -18,7 +18,7 @@ jobs:
         run: |
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
-          echo DATABASE_STAGING_URL=${{ secrets.DATABASE_STAGING_URL }} >> .env
+          echo DATABASE_URL_STAGING=${{ secrets.DATABASE_URL_STAGING }} >> .env
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
