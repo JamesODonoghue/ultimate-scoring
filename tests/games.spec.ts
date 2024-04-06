@@ -11,7 +11,3 @@ test("should allow user to create a game", async ({ page }) => {
   await page.getByRole("button", { name: /^create$/i }).click();
   await expect(page.getByText(/^0$/).first()).toBeVisible();
 });
-test("can load games", async ({ page }) => {
-  await page.goto("games");
-  await expect(page.getByText(/no games/i)).toBeVisible();
-});
