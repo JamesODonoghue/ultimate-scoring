@@ -42,13 +42,14 @@ export default function ScoreCounter({
           <CardTitle>{homeTeam}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-center gap-12 text-9xl font-bold">
+          <div className="flex items-center justify-center gap-8 text-9xl font-bold">
             <Button
               onClick={async () => {
                 handleButtonClick();
                 setHomeTeamScore(localHomeTeamScore - 1);
                 await decrementHomeTeamScore({ id });
               }}
+              disabled={localHomeTeamScore === 0}
               variant="outline"
               size="iconLarge"
             >
@@ -75,10 +76,11 @@ export default function ScoreCounter({
           <CardTitle>{awayTeam}</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-center gap-12 text-9xl font-bold">
+          <div className="flex items-center justify-center gap-8 text-9xl font-bold">
             <Button
               variant="outline"
               size="iconLarge"
+              disabled={localAwayTeamScore === 0}
               onClick={async () => {
                 handleButtonClick();
                 setAwayTeamScore(localAwayTeamScore - 1);

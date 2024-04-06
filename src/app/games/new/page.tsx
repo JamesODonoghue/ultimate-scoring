@@ -30,10 +30,6 @@ const formSchema = z.object({
 export default function NewGame() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      homeTeamId: "",
-      awayTeamId: "",
-    },
   });
   const { data, isFetched } = api.team.getAll.useQuery();
   const createGameWithForm = createGame.bind(null, {
@@ -114,12 +110,7 @@ export default function NewGame() {
                   )}
                 ></FormField>
                 {!isPending ? (
-                  <Button
-                    disabled={
-                      !form.formState.isValid || !form.formState.isDirty
-                    }
-                    type="submit"
-                  >
+                  <Button disabled={!form.formState.isValid} type="submit">
                     Create
                   </Button>
                 ) : (

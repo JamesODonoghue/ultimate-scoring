@@ -11,5 +11,5 @@ export async function createTeam(formState: null | void, formData: FormData) {
   await db.team.create({
     data: { name: teamName },
   });
-  redirect(`/game/new`);
+  redirect(`/teams`);
 }

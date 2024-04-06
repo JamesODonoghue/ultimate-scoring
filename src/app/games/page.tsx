@@ -1,5 +1,7 @@
 import { db } from "~/server/db";
 import GameCard from "./games-list";
+import { Button } from "~/components/ui/button";
+import Link from "next/link";
 export default async function Games() {
   const response = await db.game.findMany({
     include: { homeTeam: true, awayTeam: true },
@@ -8,6 +10,11 @@ export default async function Games() {
 
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-8 p-4">
+      <div className="flex justify-end">
+        <Button>
+          <Link href="/games/new">Create Game</Link>
+        </Button>
+      </div>
       {!response.length && <div>No games</div>}
       {response.map(({ id, homeTeam, awayTeam, createdAt }) => (
         <GameCard
