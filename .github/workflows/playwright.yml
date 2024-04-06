@@ -19,6 +19,8 @@ jobs:
           touch .env
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
           echo DATABASE_URL_STAGING=${{ secrets.DATABASE_URL_STAGING }} >> .env
+          echo NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }} >> .env
+          echo CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }} >> .env
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
