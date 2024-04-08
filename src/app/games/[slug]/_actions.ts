@@ -1,7 +1,7 @@
 "use server";
 import { db } from "../../../server/db";
 
-export async function incrementHomeTeamScore({ id }: { id: string }) {
+export async function incrementHomeTeamScore({ id }: { id: number }) {
   const response = await db.game.findUnique({ where: { id } });
   if (!response) {
     return new Error("Not found");
@@ -12,7 +12,7 @@ export async function incrementHomeTeamScore({ id }: { id: string }) {
     data: { homeTeamScore: homeTeamScore + 1 },
   });
 }
-export async function decrementHomeTeamScore({ id }: { id: string }) {
+export async function decrementHomeTeamScore({ id }: { id: number }) {
   const response = await db.game.findUnique({ where: { id } });
   if (!response) {
     return new Error("Not found");
@@ -24,7 +24,7 @@ export async function decrementHomeTeamScore({ id }: { id: string }) {
   });
 }
 
-export async function incrementAwayTeamScore({ id }: { id: string }) {
+export async function incrementAwayTeamScore({ id }: { id: number }) {
   const response = await db.game.findUnique({ where: { id } });
   if (!response) {
     return new Error("Not found");
@@ -35,7 +35,7 @@ export async function incrementAwayTeamScore({ id }: { id: string }) {
     data: { awayTeamScore: awayTeamScore + 1 },
   });
 }
-export async function decrementAwayTeamScore({ id }: { id: string }) {
+export async function decrementAwayTeamScore({ id }: { id: number }) {
   const response = await db.game.findUnique({ where: { id } });
   if (!response) {
     return new Error("Not found");

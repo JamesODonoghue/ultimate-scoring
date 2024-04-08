@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { db } from "~/server/db";
 
-export async function deleteTeam({ id }: { id: string }) {
+export async function deleteTeam({ id }: { id: number }) {
   const response = await db.team.delete({
     where: { id },
   });

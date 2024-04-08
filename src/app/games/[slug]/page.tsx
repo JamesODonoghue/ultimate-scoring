@@ -1,7 +1,7 @@
 import ScoreCounter from "~/app/games/[slug]/score-counter";
 import { db } from "~/server/db";
 
-export default async function Game({ params }: { params: { slug: string } }) {
+export default async function Game({ params }: { params: { slug: number } }) {
   const response = await db.game.findFirst({
     where: { id: params.slug },
     include: { homeTeam: true, awayTeam: true },
