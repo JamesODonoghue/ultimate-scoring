@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -40,11 +40,14 @@ export default function GameCard({
         <Button onClick={() => handleClickDelete(id)} variant="outline">
           Delete
         </Button>
-        <Button>
-          <Link href={`games/${id}`} key={id}>
-            View game
-          </Link>
-        </Button>
+
+        <Link
+          className={buttonVariants({ variant: "default" })}
+          href={`games/${id}`}
+          key={id}
+        >
+          View game
+        </Link>
       </CardFooter>
     </Card>
   );

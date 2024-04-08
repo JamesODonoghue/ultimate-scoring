@@ -18,16 +18,16 @@ export default function Navbar() {
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="games">
-            <Link className="w-full" href="/games">
+          <Link className="w-full" href="/games">
+            <TabsTrigger className="w-full" value="games">
               Games
-            </Link>
-          </TabsTrigger>
-          <TabsTrigger value="teams">
-            <Link className="w-full" href="/teams">
+            </TabsTrigger>
+          </Link>
+          <Link className="w-full" href="/teams">
+            <TabsTrigger className="w-full" value="teams">
               Teams
-            </Link>
-          </TabsTrigger>
+            </TabsTrigger>
+          </Link>
         </TabsList>
       </Tabs>
     </div>
