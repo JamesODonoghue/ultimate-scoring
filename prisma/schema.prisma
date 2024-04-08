@@ -12,27 +12,39 @@ datasource db {
 }
 
 model Team {
-    id        String      @id @default(cuid())
-    name String
+    id            String @id @default(cuid())
+    name          String
     gamesHomeTeam Game[] @relation(name: "HomeTeam")
     gamesAwayTeam Game[] @relation(name: "AwayTeam")
-    @@index([id])
 
+    @@index([id])
 }
 
 model Game {
-    id        String      @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    createdBy String?
-    homeTeam Team @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
-    homeTeamId String
-    awayTeam Team @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
-    awayTeamId String
-    homeTeamScore Int @default(0)
-    awayTeamScore Int @default(0)
+    id            String   @id @default(cuid())
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+    createdBy     String?
+    homeTeam      Team     @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
+    homeTeamId    String
+    awayTeam      Team     @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
+    awayTeamId    String
+    homeTeamScore Int      @default(0)
+    awayTeamScore Int      @default(0)
+    points        Point[]
+
     @@index([homeTeamId])
     @@index([awayTeamId])
     @@index([createdBy])
 }
 
+model Player {
+    id   String @id @default(cuid())
+    name String
+}
+
+model Point {
+    id     Int    @id @default(autoincrement())
+    game   Game   @relation(fields: [gameId], references: [id])
+    gameId String
+}
