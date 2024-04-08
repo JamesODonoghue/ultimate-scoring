@@ -18,7 +18,7 @@ export default function ScoreCounter({
   homeTeam,
   awayTeam,
 }: {
-  id: string;
+  id: number;
   homeTeamScore: number;
   awayTeamScore: number;
   homeTeam: string;

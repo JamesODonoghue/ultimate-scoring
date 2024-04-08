@@ -15,7 +15,11 @@ export const gameRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input: { homeTeamId, awayTeamId } }) => {
       const game = await ctx.db.game.create({
-        data: { homeTeamId, awayTeamId, createdBy: ctx.auth.userId },
+        data: {
+          homeTeamId: parseInt(homeTeamId),
+          awayTeamId: parseInt(awayTeamId),
+          createdBy: ctx.auth.userId,
+        },
       });
       return game;
     }),
@@ -29,7 +33,7 @@ export const gameRouter = createTRPCRouter({
     )
     .mutation(({ ctx, input: { homeTeamScore, awayTeamScore, id } }) => {
       return ctx.db.game.update({
-        where: { id },
+        where: { id: parseInt(id) },
         data: { homeTeamScore, awayTeamScore },
       });
     }),
@@ -41,7 +45,7 @@ export const gameRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(({ ctx, input: { id } }) =>
       ctx.db.game.findUnique({
-        where: { id },
+        where: { id: parseInt(id) },
         include: { homeTeam: true, awayTeam: true },
       }),
     ),

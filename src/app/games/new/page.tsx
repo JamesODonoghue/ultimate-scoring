@@ -72,7 +72,10 @@ export default function NewGame() {
                         </FormControl>
                         <SelectContent>
                           {data?.map((item) => (
-                            <SelectItem key={item.id} value={item.id}>
+                            <SelectItem
+                              key={item.id}
+                              value={item.id.toString()}
+                            >
                               {item.name}
                             </SelectItem>
                           ))}
@@ -99,7 +102,10 @@ export default function NewGame() {
                         </FormControl>
                         <SelectContent>
                           {data?.map((item) => (
-                            <SelectItem key={item.id} value={item.id}>
+                            <SelectItem
+                              key={item.id}
+                              value={item.id.toString()}
+                            >
                               {item.name}
                             </SelectItem>
                           ))}

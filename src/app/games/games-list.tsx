@@ -16,12 +16,12 @@ export default function GameCard({
   awayTeam,
   createdAt,
 }: {
-  id: string;
-  homeTeam: { id: string; name: string };
-  awayTeam: { id: string; name: string };
+  id: number;
+  homeTeam: { id: number; name: string };
+  awayTeam: { id: number; name: string };
   createdAt: Date;
 }) {
-  async function handleClickDelete(id: string) {
+  async function handleClickDelete(id: number) {
     await deleteGame({ id });
   }
   return (
