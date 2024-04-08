@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Team {
-    id            String @id @default(cuid())
+    id            Int    @id @default(autoincrement())
     name          String
     gamesHomeTeam Game[] @relation(name: "HomeTeam")
     gamesAwayTeam Game[] @relation(name: "AwayTeam")
@@ -21,14 +21,14 @@ model Team {
 }
 
 model Game {
-    id            String   @id @default(cuid())
+    id            Int      @id @default(autoincrement())
     createdAt     DateTime @default(now())
     updatedAt     DateTime @updatedAt
     createdBy     String?
     homeTeam      Team     @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
-    homeTeamId    String
+    homeTeamId    Int
     awayTeam      Team     @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
-    awayTeamId    String
+    awayTeamId    Int
     homeTeamScore Int      @default(0)
     awayTeamScore Int      @default(0)
     points        Point[]
@@ -39,12 +39,12 @@ model Game {
 }
 
 model Player {
-    id   String @id @default(cuid())
+    id   Int    @id @default(autoincrement())
     name String
 }
 
 model Point {
-    id     Int    @id @default(autoincrement())
-    game   Game   @relation(fields: [gameId], references: [id])
-    gameId String
+    id     Int  @id @default(autoincrement())
+    game   Game @relation(fields: [gameId], references: [id])
+    gameId Int
 }
