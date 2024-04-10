@@ -2,10 +2,8 @@ name: Migrate
 on:
   push:
     branches: [main, master]
-  pull_request:
-    branches: [main, master]
 jobs:
-  test:
+  migrate:
     environment: production
     timeout-minutes: 60
     runs-on: ubuntu-latest
