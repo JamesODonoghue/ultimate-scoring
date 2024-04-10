@@ -2,7 +2,7 @@
 import { Button } from "../../../../components/ui/button";
 import { startGame } from "~/app/games/[slug]/_actions";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { useForm } from "react-hook-form";
 import { useFormCustom } from "~/hooks/useForm";

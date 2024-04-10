@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: { homeTeam: true; awayTeam: true; points: true };
