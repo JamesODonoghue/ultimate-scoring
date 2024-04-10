@@ -1,6 +1,6 @@
 import { db } from "~/server/db";
 import GameCard from "./games-list";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
 import Link from "next/link";
 export default async function Games() {
   const response = await db.game.findMany({

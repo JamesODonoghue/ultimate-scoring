@@ -12,35 +12,46 @@ datasource db {
 }
 
 model Team {
-    id            Int    @id @default(autoincrement())
+    id            Int      @id @default(autoincrement())
     name          String
-    gamesHomeTeam Game[] @relation(name: "HomeTeam")
-    gamesAwayTeam Game[] @relation(name: "AwayTeam")
+    gamesHomeTeam Game[]   @relation(name: "HomeTeam")
+    gamesAwayTeam Game[]   @relation(name: "AwayTeam")
+    Player        Player[]
 
     @@index([id])
 }
 
 model Game {
-    id            Int      @id @default(autoincrement())
-    createdAt     DateTime @default(now())
-    updatedAt     DateTime @updatedAt
-    createdBy     String?
-    homeTeam      Team     @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
-    homeTeamId    Int
-    awayTeam      Team     @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
-    awayTeamId    Int
-    homeTeamScore Int      @default(0)
-    awayTeamScore Int      @default(0)
-    points        Point[]
+    id              Int        @id @default(autoincrement())
+    createdAt       DateTime   @default(now())
+    updatedAt       DateTime   @updatedAt
+    createdBy       String?
+    homeTeam        Team       @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
+    homeTeamId      Int
+    awayTeam        Team       @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
+    awayTeamId      Int
+    homeTeamScore   Int        @default(0)
+    awayTeamScore   Int        @default(0)
+    points          Point[]
+    status          GameStatus @default(READY)
+    startingOffense String?    @default("")
 
     @@index([homeTeamId])
     @@index([awayTeamId])
     @@index([createdBy])
 }
 
+enum GameStatus {
+    READY
+    STARTED
+    COMPLETED
+}
+
 model Player {
     id          Int           @id @default(autoincrement())
     name        String
+    team        Team          @relation(fields: [teamId], references: [id])
+    teamId      Int
     pointPlayer PointPlayer[]
 }
 

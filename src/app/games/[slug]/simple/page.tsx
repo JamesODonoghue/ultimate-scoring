@@ -1,6 +1,5 @@
-import ScoreCounter from "~/app/games/[slug]/score-counter";
+import ScoreCounter from "~/app/games/[slug]/simple/score-counter";
 import { db } from "~/server/db";
-
 export default async function Game({ params }: { params: { slug: string } }) {
   const response = await db.game.findFirst({
     where: { id: parseInt(params.slug) },
@@ -14,10 +13,12 @@ export default async function Game({ params }: { params: { slug: string } }) {
     awayTeam: { name: awayTeamName },
   } = response;
   return (
-    <ScoreCounter
-      {...response}
-      homeTeam={homeTeamName}
-      awayTeam={awayTeamName}
-    />
+    <>
+      <ScoreCounter
+        {...response}
+        homeTeam={homeTeamName}
+        awayTeam={awayTeamName}
+      />
+    </>
   );
 }

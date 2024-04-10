@@ -1,8 +1,7 @@
 "use client";
 import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
-import { Button } from "./ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 import { usePathname } from "next/navigation";
 export default function Navbar() {
   const pathname = usePathname();
