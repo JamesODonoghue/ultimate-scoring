@@ -1,24 +1,9 @@
 "use client";
-import { Minus, Plus } from "lucide-react";
-import { Button, buttonVariants } from "../../../../components/ui/button";
-import { useState } from "react";
-import {
-  decrementAwayTeamScore,
-  decrementHomeTeamScore,
-  incrementAwayTeamScore,
-  incrementHomeTeamScore,
-  startGame,
-} from "~/app/games/[slug]/_actions";
+import { Button } from "../../../../components/ui/button";
+import { startGame } from "~/app/games/[slug]/_actions";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { useClerk, useUser } from "@clerk/nextjs";
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs";
-import Link from "next/link";
-import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { Game, Team } from "@prisma/client";
-
 import { Prisma } from "@prisma/client";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
-import { Label } from "~/components/ui/label";
 import { useForm } from "react-hook-form";
 import { useFormCustom } from "~/hooks/useForm";
 import {
@@ -28,16 +13,6 @@ import {
   FormItem,
   FormLabel,
 } from "~/components/ui/form";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "~/components/ui/drawer";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: { homeTeam: true; awayTeam: true; points: true };
@@ -45,29 +20,11 @@ type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
 export default function GameDetail({
   homeTeam: { name: homeTeamName },
   awayTeam: { name: awayTeamName },
-  homeTeamScore,
-  awayTeamScore,
-  status,
   id,
-  points,
 }: GameWithTeamsAndPoints) {
   const form = useForm();
-  const { isPending, formAction, onSubmit } = useFormCustom(startGame, null);
+  const { formAction, onSubmit } = useFormCustom(startGame, null);
 
-  // const [localHomeTeamScore, setHomeTeamScore] =
-  //   useState<number>(homeTeamScore);
-  // const [localAwayTeamScore, setAwayTeamScore] =
-  //   useState<number>(awayTeamScore);
-  // const user = useUser();
-  // const clerk = useClerk();
-  // function handleButtonClick() {
-  //   if (!user.isSignedIn) {
-  //     clerk.openSignIn();
-  //   }
-  // }
-  // async function handleClickStartGame({ id, startingOffense }) {
-  //   await startGame({ id });
-  // }
   return (
     <div className=" mx-auto flex max-w-xl flex-col gap-8 p-4">
       <Card>
