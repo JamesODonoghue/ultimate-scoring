@@ -36,17 +36,27 @@ export default function GameCard({
           })}
         </CardDescription>
       </CardHeader>
-      <CardFooter className="flex justify-end gap-4">
-        <Button onClick={() => handleClickDelete(id)} variant="outline">
+      <CardFooter className="flex w-full flex-col gap-4">
+        <Button
+          className="w-full"
+          onClick={() => handleClickDelete(id)}
+          variant="outline"
+        >
           Delete
         </Button>
 
         <Link
-          className={buttonVariants({ variant: "default" })}
-          href={`games/${id}`}
-          key={id}
+          className={`${buttonVariants({ variant: "outline" })} w-full`}
+          href={`games/${id}/advanced`}
         >
-          View game
+          View advanced
+        </Link>
+
+        <Link
+          className={`${buttonVariants({ variant: "default" })} w-full`}
+          href={`games/${id}/simple`}
+        >
+          View simple
         </Link>
       </CardFooter>
     </Card>

@@ -25,5 +25,5 @@ export async function createGame(formData: {
     },
   });
   revalidatePath("games");
-  redirect(`/games/${id}`);
+  redirect(`/games/${id}/simple`);
 }
