@@ -39,6 +39,9 @@ import {
 } from "~/components/ui/drawer";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { Badge } from "~/components/ui/badge";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: {
@@ -53,12 +56,24 @@ export default function GameStarted({
   homeTeamScore,
   awayTeamScore,
   homeTeamId,
-  awayTeamId,
   players,
   points,
   id: gameId,
 }: GameWithTeamsAndPoints & { players: Player[] }) {
-  const form = useForm();
+  const formSchema = z.object({
+    playerName: z.string().min(2, {
+      message: "Player name must be at least 2 characters.",
+    }),
+  });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      playerName: "",
+    },
+  });
+  const {
+    formState: { isValid },
+  } = form;
   const ref = useRef<HTMLFormElement>(null);
 
   const { formAction: addPlayerFormAction, onSubmit: addPlayerOnSubmit } =
@@ -110,7 +125,7 @@ export default function GameStarted({
     pointPlayerId: number | undefined;
   }) {
     if (checked) {
-      return await createPointPlayer({ playerId: id, pointId });
+      return await createPointPlayer({ playerId: id, pointId, gameId });
     }
     if (pointPlayerId) {
       await deletePointPlayer({ id: pointPlayerId });
@@ -163,6 +178,12 @@ export default function GameStarted({
 
   return (
     <div className=" mx-auto flex max-w-xl flex-col gap-8 p-4">
+      <Link
+        className={buttonVariants({ variant: "ghost" })}
+        href="advanced/stats"
+      >
+        View Game Stats
+      </Link>
       <Card>
         <CardHeader>
           <CardTitle className="flex justify-between text-lg">
@@ -209,11 +230,6 @@ export default function GameStarted({
                     />
                     <Label htmlFor={id.toString()}>{name}</Label>
                   </div>
-                  <div>
-                    <Button onClick={() => deletePlayer(id)} variant="outline">
-                      Delete
-                    </Button>
-                  </div>
                 </div>
               ))}
               <Form {...form}>
@@ -224,6 +240,8 @@ export default function GameStarted({
                   className="flex flex-col gap-4"
                 >
                   <input hidden defaultValue={homeTeamId} name="teamId" />
+                  <input hidden defaultValue={latestPoint.id} name="pointId" />
+                  <input hidden defaultValue={gameId} name="gameId" />
                   <FormField
                     control={form.control}
                     name="playerName"
@@ -234,13 +252,13 @@ export default function GameStarted({
                           <Input
                             placeholder="John Doe"
                             {...field}
-                            value={(field.value as string) ?? ""}
+                            value={field.value ?? ""}
                           />
                         </FormControl>
                       </FormItem>
                     )}
                   ></FormField>
-                  <Button variant="secondary" type="submit">
+                  <Button disabled={!isValid} variant="secondary" type="submit">
                     Add Player
                   </Button>
                 </form>
