@@ -9,6 +9,12 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { deleteGame } from "./_actions";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 
 export default function GameCard({
   id,
@@ -37,27 +43,42 @@ export default function GameCard({
         </CardDescription>
       </CardHeader>
       <CardFooter className="flex w-full flex-col gap-4">
-        <Button
-          className="w-full"
-          onClick={() => handleClickDelete(id)}
-          variant="outline"
-        >
-          Delete
-        </Button>
+        {/* <div className="flex w-full justify-between">
+          <Button onClick={() => handleClickDelete(id)} variant="outline">
+            Delete
+          </Button>
 
-        <Link
-          className={`${buttonVariants({ variant: "outline" })} w-full`}
-          href={`games/${id}/advanced`}
-        >
-          View advanced
-        </Link>
+          <Link
+            className={`${buttonVariants({ variant: "outline" })}`}
+            href={`games/${id}/advanced`}
+          >
+            View advanced
+          </Link>
+        </div> */}
 
-        <Link
-          className={`${buttonVariants({ variant: "default" })} w-full`}
-          href={`games/${id}/simple`}
-        >
-          View simple
-        </Link>
+        <div className="flex w-full justify-end gap-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className={buttonVariants({ variant: "secondary" })}
+            >
+              More
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                <Link href={`games/${id}/advanced`}>View advanced</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleClickDelete(id)}>
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Link
+            className={`${buttonVariants({ variant: "default" })}`}
+            href={`games/${id}/simple`}
+          >
+            View simple
+          </Link>
+        </div>
       </CardFooter>
     </Card>
   );

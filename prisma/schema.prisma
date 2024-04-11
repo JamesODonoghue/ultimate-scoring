@@ -71,10 +71,10 @@ model PointPlayer {
     id        Int    @id @default(autoincrement())
     player    Player @relation(fields: [playerId], references: [id])
     playerId  Int
-    assists   Int
-    goals     Int
-    blocks    Int
-    turnovers Int
+    assists   Int?   @default(0)
+    goals     Int?   @default(0)
+    blocks    Int?   @default(0)
+    turnovers Int?   @default(0)
     point     Point? @relation(fields: [pointId], references: [id])
     pointId   Int?
 }
