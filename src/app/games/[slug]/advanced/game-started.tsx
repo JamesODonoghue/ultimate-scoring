@@ -17,7 +17,6 @@ import {
   addGoal,
   createPlayer,
   createPointPlayer,
-  deletePlayer,
   deletePointPlayer,
   endPoint,
   incrementAwayTeamScore,
@@ -27,7 +26,6 @@ import {
 } from "../_actions";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
-import { useRef } from "react";
 import {
   Drawer,
   DrawerClose,
@@ -42,6 +40,7 @@ import { Badge } from "~/components/ui/badge";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { toast } from "sonner";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: {
@@ -71,16 +70,12 @@ export default function GameStarted({
       playerName: "",
     },
   });
-  const {
-    formState: { isValid },
-  } = form;
-  const ref = useRef<HTMLFormElement>(null);
+  const { formState } = form;
+  const { isValid } = formState;
 
   const { formAction: addPlayerFormAction, onSubmit: addPlayerOnSubmit } =
     useFormCustom(createPlayer, null);
-
   const latestPoint = points.at(-1);
-
   if (!latestPoint) {
     return <div>No point exists</div>;
   }
@@ -234,9 +229,12 @@ export default function GameStarted({
               ))}
               <Form {...form}>
                 <form
-                  ref={ref}
                   action={addPlayerFormAction}
-                  onSubmit={addPlayerOnSubmit}
+                  onSubmit={(event) => {
+                    addPlayerOnSubmit(event);
+                    toast("New player added");
+                    form.reset();
+                  }}
                   className="flex flex-col gap-4"
                 >
                   <input hidden defaultValue={homeTeamId} name="teamId" />
