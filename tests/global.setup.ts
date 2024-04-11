@@ -3,6 +3,9 @@ import { db } from "~/server/db";
 
 setup("create new database", async ({}) => {
   console.log("seeding database...");
+  await db.player.deleteMany();
+  await db.pointPlayer.deleteMany();
+  await db.point.deleteMany();
   await db.game.deleteMany();
   await db.team.deleteMany();
   await db.team.createMany({
