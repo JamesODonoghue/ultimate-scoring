@@ -6,8 +6,8 @@ setup("create new database", async ({}) => {
   await db.player.deleteMany();
   await db.pointPlayer.deleteMany();
   await db.point.deleteMany();
-  await db.team.deleteMany();
   await db.game.deleteMany();
+  await db.team.deleteMany();
   await db.team.createMany({
     data: [
       {
