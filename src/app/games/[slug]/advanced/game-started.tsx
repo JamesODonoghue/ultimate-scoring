@@ -179,7 +179,7 @@ export default function GameStarted({
             {latestPoint.status === "READY" ? (
               <Badge>Point Ready</Badge>
             ) : latestPoint.status === "STARTED" ? (
-              <Badge>Point Started</Badge>
+              <Badge>Point In Progress</Badge>
             ) : (
               <></>
             )}
@@ -272,7 +272,7 @@ export default function GameStarted({
                     <DrawerHeader>
                       <DrawerTitle>Add Goal</DrawerTitle>
                     </DrawerHeader>
-                    <div className="p-4">
+                    <div className="flex flex-col gap-2 p-4">
                       {latestPointPlayers.map(
                         ({ gamePlayer, id, assists, goals }) => (
                           <div
@@ -282,6 +282,7 @@ export default function GameStarted({
                             <div className="flex w-full items-center justify-between gap-4">
                               <div>{gamePlayer?.name}</div>
                               <ToggleGroup
+                                className="flex gap-2"
                                 type="single"
                                 defaultValue={
                                   !!assists ? "assist" : !!goals ? "goal" : ""
