@@ -38,6 +38,7 @@ import {
   DrawerTrigger,
 } from "~/components/ui/drawer";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
+import { Badge } from "~/components/ui/badge";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: {
@@ -78,14 +79,24 @@ export default function GameStarted({
     };
   });
 
-  const latestPointPlayers = currentPointPlayers.map((currentPointPlayer) => {
-    return {
-      ...currentPointPlayer,
-      gamePlayer: gamePlayers.find(
-        (gamePlayer) => gamePlayer.id === currentPointPlayer.playerId,
-      ),
-    };
-  });
+  const latestPointPlayers = currentPointPlayers
+    .map((currentPointPlayer) => {
+      return {
+        ...currentPointPlayer,
+        gamePlayer: gamePlayers.find(
+          (gamePlayer) => gamePlayer.id === currentPointPlayer.playerId,
+        ),
+      };
+    })
+    .sort((prev, curr) => {
+      if (!prev.gamePlayer) {
+        return -1;
+      }
+      if (!curr.gamePlayer) {
+        return -1;
+      }
+      return prev.gamePlayer.name.localeCompare(curr.gamePlayer.name);
+    });
 
   async function handleChangePlayerCheckbox({
     checked,
@@ -164,11 +175,21 @@ export default function GameStarted({
               <div>{awayTeamScore}</div>
             </div>
           </CardTitle>
+          <div>
+            {latestPoint.status === "READY" ? (
+              <Badge>Point Ready</Badge>
+            ) : latestPoint.status === "STARTED" ? (
+              <Badge>Point In Progress</Badge>
+            ) : (
+              <></>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {latestPoint.status === "READY" ? (
             <div className="flex flex-col gap-4">
               <CardTitle>{homeTeamName}</CardTitle>
+              <div>Select players for this point</div>
               {gamePlayers.map(({ name, id, pointPlayerId }) => (
                 <div className="flex items-center justify-between" key={id}>
                   <div className="flex gap-4">
@@ -236,7 +257,7 @@ export default function GameStarted({
                 <Drawer>
                   <CardTitle>{homeTeamName}</CardTitle>
                   <DrawerTrigger
-                    className={buttonVariants({ variant: "default" })}
+                    className={buttonVariants({ variant: "outline" })}
                   >
                     Add Goal
                   </DrawerTrigger>
@@ -251,7 +272,7 @@ export default function GameStarted({
                     <DrawerHeader>
                       <DrawerTitle>Add Goal</DrawerTitle>
                     </DrawerHeader>
-                    <div className="p-4">
+                    <div className="flex flex-col gap-2 p-4">
                       {latestPointPlayers.map(
                         ({ gamePlayer, id, assists, goals }) => (
                           <div
@@ -261,6 +282,7 @@ export default function GameStarted({
                             <div className="flex w-full items-center justify-between gap-4">
                               <div>{gamePlayer?.name}</div>
                               <ToggleGroup
+                                className="flex gap-2"
                                 type="single"
                                 defaultValue={
                                   !!assists ? "assist" : !!goals ? "goal" : ""
@@ -304,6 +326,7 @@ export default function GameStarted({
               <div className="flex w-full flex-col gap-4">
                 <CardTitle>{awayTeamName}</CardTitle>
                 <Button
+                  variant="outline"
                   onClick={() =>
                     handleClickAwayTeamAddGoal({
                       gameId,
