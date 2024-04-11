@@ -22,19 +22,20 @@ model Team {
 }
 
 model Game {
-    id              Int        @id @default(autoincrement())
-    createdAt       DateTime   @default(now())
-    updatedAt       DateTime   @updatedAt
+    id              Int           @id @default(autoincrement())
+    createdAt       DateTime      @default(now())
+    updatedAt       DateTime      @updatedAt
     createdBy       String?
-    homeTeam        Team       @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
+    homeTeam        Team          @relation(name: "HomeTeam", fields: [homeTeamId], references: [id])
     homeTeamId      Int
-    awayTeam        Team       @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
+    awayTeam        Team          @relation(name: "AwayTeam", fields: [awayTeamId], references: [id])
     awayTeamId      Int
-    homeTeamScore   Int        @default(0)
-    awayTeamScore   Int        @default(0)
+    homeTeamScore   Int           @default(0)
+    awayTeamScore   Int           @default(0)
     points          Point[]
-    status          GameStatus @default(READY)
-    startingOffense String?    @default("")
+    status          GameStatus    @default(READY)
+    startingOffense String?       @default("")
+    PointPlayer     PointPlayer[]
 
     @@index([homeTeamId])
     @@index([awayTeamId])
@@ -71,6 +72,8 @@ model PointPlayer {
     id        Int    @id @default(autoincrement())
     player    Player @relation(fields: [playerId], references: [id])
     playerId  Int
+    game      Game   @relation(fields: [gameId], references: [id])
+    gameId    Int
     assists   Int?   @default(0)
     goals     Int?   @default(0)
     blocks    Int?   @default(0)

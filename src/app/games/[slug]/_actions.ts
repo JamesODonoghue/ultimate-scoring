@@ -65,11 +65,12 @@ export async function createPlayer(formState: null | void, formData: FormData) {
   const name = formData.get("playerName") as string;
   const teamId = parseInt(formData.get("teamId") as string);
   const pointId = parseInt(formData.get("pointId") as string);
+  const gameId = parseInt(formData.get("gameId") as string);
   const { id: playerId } = await db.player.create({
     data: { name, teamId },
   });
   await db.pointPlayer.create({
-    data: { pointId, playerId },
+    data: { pointId, playerId, gameId },
   });
   revalidatePath("/game");
   revalidatePath("/player");
@@ -103,12 +104,14 @@ export async function endPoint({ id, gameId }: { id: number; gameId: number }) {
 export async function createPointPlayer({
   playerId,
   pointId,
+  gameId,
 }: {
   playerId: number;
   pointId: number;
+  gameId: number;
 }) {
   await db.pointPlayer.create({
-    data: { playerId, pointId },
+    data: { playerId, pointId, gameId },
   });
   revalidatePath("/player");
 }
