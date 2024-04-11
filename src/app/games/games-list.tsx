@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Button, buttonVariants } from "~/components/ui/button";
+import { buttonVariants } from "~/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -43,19 +43,6 @@ export default function GameCard({
         </CardDescription>
       </CardHeader>
       <CardFooter className="flex w-full flex-col gap-4">
-        {/* <div className="flex w-full justify-between">
-          <Button onClick={() => handleClickDelete(id)} variant="outline">
-            Delete
-          </Button>
-
-          <Link
-            className={`${buttonVariants({ variant: "outline" })}`}
-            href={`games/${id}/advanced`}
-          >
-            View advanced
-          </Link>
-        </div> */}
-
         <div className="flex w-full justify-end gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger

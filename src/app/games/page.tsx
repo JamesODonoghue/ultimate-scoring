@@ -18,7 +18,9 @@ export default async function Games() {
           Create Game
         </Link>
       </div>
-      {!response.length && <div>No games</div>}
+      {!response.length && (
+        <div className="flex justify-center">No games created</div>
+      )}
       {response.map(({ id, homeTeam, awayTeam, createdAt }) => (
         <GameCard
           key={id}

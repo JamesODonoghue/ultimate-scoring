@@ -40,7 +40,6 @@ export default function NewGame() {
     createGameWithForm,
     null,
   );
-
   return (
     <div className="mx-auto max-w-xl p-4">
       <Card>
