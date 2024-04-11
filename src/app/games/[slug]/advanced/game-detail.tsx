@@ -42,6 +42,7 @@ export default function GameDetail({
                   <FormField
                     control={form.control}
                     name="startingOffense"
+                    defaultValue={homeTeamName}
                     render={({ field }) => (
                       <FormItem className="flex flex-col gap-4">
                         <FormLabel>Starting Offense</FormLabel>
