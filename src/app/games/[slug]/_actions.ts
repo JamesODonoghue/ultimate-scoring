@@ -72,6 +72,7 @@ export async function createPlayer(formState: null | void, formData: FormData) {
     data: { pointId, playerId },
   });
   revalidatePath("/game");
+  revalidatePath("/player");
 }
 
 export async function deletePlayer(id: number) {
@@ -81,13 +82,22 @@ export async function deletePlayer(id: number) {
   revalidatePath("/player");
 }
 
-export async function startPoint(formState: null | void, formData: FormData) {
-  const id = parseInt(formData.get("pointId") as string);
+export async function startPoint(id: number) {
   await db.point.update({
     where: { id },
     data: { status: "STARTED" },
   });
-  revalidatePath("/player");
+  revalidatePath("/game");
+}
+export async function endPoint({ id, gameId }: { id: number; gameId: number }) {
+  await db.point.update({
+    where: { id },
+    data: { status: "COMPLETED" },
+  });
+  await db.point.create({
+    data: { gameId },
+  });
+  revalidatePath("/game");
 }
 
 export async function createPointPlayer({
@@ -108,4 +118,28 @@ export async function deletePointPlayer({ id }: { id: number }) {
     where: { id },
   });
   revalidatePath("/player");
+}
+
+export async function addAssist({ id }: { id: number }) {
+  await db.pointPlayer.update({
+    where: { id },
+    data: { assists: 1, goals: 0 },
+  });
+  revalidatePath("/game");
+}
+
+export async function addGoal({ id }: { id: number }) {
+  await db.pointPlayer.update({
+    where: { id },
+    data: { goals: 1, assists: 0 },
+  });
+  revalidatePath("/game");
+}
+
+export async function resetPointPlayerStats({ id }: { id: number }) {
+  await db.pointPlayer.update({
+    where: { id },
+    data: { goals: 0, assists: 0 },
+  });
+  revalidatePath("/game");
 }

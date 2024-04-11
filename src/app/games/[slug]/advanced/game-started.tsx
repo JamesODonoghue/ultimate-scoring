@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "../../../../components/ui/button";
+import { Button, buttonVariants } from "../../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { type Player, type Prisma } from "@prisma/client";
 import { useForm } from "react-hook-form";
@@ -13,13 +13,31 @@ import {
 import { Input } from "~/components/ui/input";
 import { useFormCustom } from "~/hooks/useForm";
 import {
+  addAssist,
+  addGoal,
   createPlayer,
   createPointPlayer,
   deletePlayer,
   deletePointPlayer,
+  endPoint,
+  incrementAwayTeamScore,
+  incrementHomeTeamScore,
+  resetPointPlayerStats,
+  startPoint,
 } from "../_actions";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Label } from "~/components/ui/label";
+import { useRef } from "react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "~/components/ui/drawer";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: {
@@ -34,10 +52,14 @@ export default function GameStarted({
   homeTeamScore,
   awayTeamScore,
   homeTeamId,
+  awayTeamId,
   players,
   points,
+  id: gameId,
 }: GameWithTeamsAndPoints & { players: Player[] }) {
   const form = useForm();
+  const ref = useRef<HTMLFormElement>(null);
+
   const { formAction: addPlayerFormAction, onSubmit: addPlayerOnSubmit } =
     useFormCustom(createPlayer, null);
 
@@ -55,6 +77,16 @@ export default function GameStarted({
       )?.id,
     };
   });
+
+  const latestPointPlayers = currentPointPlayers.map((currentPointPlayer) => {
+    return {
+      ...currentPointPlayer,
+      gamePlayer: gamePlayers.find(
+        (gamePlayer) => gamePlayer.id === currentPointPlayer.playerId,
+      ),
+    };
+  });
+
   async function handleChangePlayerCheckbox({
     checked,
     id,
@@ -74,6 +106,50 @@ export default function GameStarted({
     }
   }
 
+  async function handleClickStartPoint({ id }: { id: number }) {
+    await startPoint(id);
+  }
+
+  async function handleClickAwayTeamAddGoal({
+    pointId,
+    gameId,
+  }: {
+    pointId: number;
+    gameId: number;
+  }) {
+    await incrementAwayTeamScore({ id: gameId });
+    await endPoint({ id: pointId, gameId });
+  }
+
+  async function handleChangePlayerStat({
+    event,
+    id,
+    gameId,
+  }: {
+    event: string;
+    id: number;
+    gameId: number;
+  }) {
+    if (event === "assist") {
+      return await addAssist({ id });
+    }
+    if (event === "goal") {
+      await incrementHomeTeamScore({ id: gameId });
+      return await addGoal({ id });
+    }
+    return await resetPointPlayerStats({ id });
+  }
+
+  async function handleClickEndPoint({
+    id,
+    gameId,
+  }: {
+    id: number;
+    gameId: number;
+  }) {
+    await endPoint({ id, gameId });
+  }
+
   return (
     <div className=" mx-auto flex max-w-xl flex-col gap-8 p-4">
       <Card>
@@ -90,57 +166,158 @@ export default function GameStarted({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col gap-4">
-            <CardTitle>{homeTeamName}</CardTitle>
-            {gamePlayers.map(({ name, id, pointPlayerId }) => (
-              <div className="flex items-center justify-between" key={id}>
-                <div className="flex gap-4">
-                  <Checkbox
-                    value={id}
-                    id={id.toString()}
-                    className="flex items-center justify-between"
-                    checked={!!pointPlayerId}
-                    onCheckedChange={(event) =>
-                      handleChangePlayerCheckbox({
-                        checked: event,
-                        id,
-                        pointId: latestPoint.id,
-                        pointPlayerId,
-                      })
-                    }
-                  />
-                  <Label htmlFor={id.toString()}>{name}</Label>
+          {latestPoint.status === "READY" ? (
+            <div className="flex flex-col gap-4">
+              <CardTitle>{homeTeamName}</CardTitle>
+              {gamePlayers.map(({ name, id, pointPlayerId }) => (
+                <div className="flex items-center justify-between" key={id}>
+                  <div className="flex gap-4">
+                    <Checkbox
+                      value={id}
+                      id={id.toString()}
+                      className="flex items-center justify-between"
+                      checked={!!pointPlayerId}
+                      onCheckedChange={(event) =>
+                        handleChangePlayerCheckbox({
+                          checked: event,
+                          id,
+                          pointId: latestPoint.id,
+                          pointPlayerId,
+                        })
+                      }
+                    />
+                    <Label htmlFor={id.toString()}>{name}</Label>
+                  </div>
+                  <div>
+                    <Button onClick={() => deletePlayer(id)} variant="outline">
+                      Delete
+                    </Button>
+                  </div>
                 </div>
-                <div>
-                  <Button onClick={() => deletePlayer(id)} variant="outline">
-                    Delete
+              ))}
+              <Form {...form}>
+                <form
+                  ref={ref}
+                  action={addPlayerFormAction}
+                  onSubmit={addPlayerOnSubmit}
+                  className="flex flex-col gap-4"
+                >
+                  <input hidden defaultValue={homeTeamId} name="teamId" />
+                  <FormField
+                    control={form.control}
+                    name="playerName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Player Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="John Doe"
+                            {...field}
+                            value={(field.value as string) ?? ""}
+                          />
+                        </FormControl>
+                      </FormItem>
+                    )}
+                  ></FormField>
+                  <Button variant="secondary" type="submit">
+                    Add Player
                   </Button>
-                </div>
-              </div>
-            ))}
-            <Form {...form}>
-              <form
-                action={addPlayerFormAction}
-                onSubmit={addPlayerOnSubmit}
-                className="flex flex-col"
+                </form>
+              </Form>
+              <Button
+                onClick={() => handleClickStartPoint({ id: latestPoint.id })}
               >
-                <input hidden defaultValue={homeTeamId} name="teamId" />
-                <FormField
-                  control={form.control}
-                  name="playerName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Player Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="John Doe" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                ></FormField>
-                <Button type="submit">Add Player</Button>
-              </form>
-            </Form>
-          </div>
+                Start Point
+              </Button>
+            </div>
+          ) : latestPoint.status === "STARTED" ? (
+            <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-4">
+                <Drawer>
+                  <CardTitle>{homeTeamName}</CardTitle>
+                  <DrawerTrigger
+                    className={buttonVariants({ variant: "default" })}
+                  >
+                    Add Goal
+                  </DrawerTrigger>
+                  {latestPointPlayers.map(({ gamePlayer, id }) => (
+                    <div className="flex items-center justify-between" key={id}>
+                      <div className="flex gap-4">
+                        <div>{gamePlayer?.name}</div>
+                      </div>
+                    </div>
+                  ))}
+                  <DrawerContent>
+                    <DrawerHeader>
+                      <DrawerTitle>Add Goal</DrawerTitle>
+                    </DrawerHeader>
+                    <div className="p-4">
+                      {latestPointPlayers.map(
+                        ({ gamePlayer, id, assists, goals }) => (
+                          <div
+                            className="flex items-center justify-between"
+                            key={id}
+                          >
+                            <div className="flex w-full items-center justify-between gap-4">
+                              <div>{gamePlayer?.name}</div>
+                              <ToggleGroup
+                                type="single"
+                                defaultValue={
+                                  !!assists ? "assist" : !!goals ? "goal" : ""
+                                }
+                                onValueChange={(event) =>
+                                  handleChangePlayerStat({
+                                    event,
+                                    id,
+                                    gameId,
+                                  })
+                                }
+                              >
+                                <ToggleGroupItem
+                                  variant="outline"
+                                  value="assist"
+                                >
+                                  Assist
+                                </ToggleGroupItem>
+                                <ToggleGroupItem variant="outline" value="goal">
+                                  Goal
+                                </ToggleGroupItem>
+                              </ToggleGroup>
+                            </div>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <DrawerFooter>
+                      <DrawerClose
+                        className={buttonVariants({ variant: "default" })}
+                        onClick={() =>
+                          handleClickEndPoint({ id: latestPoint.id, gameId })
+                        }
+                      >
+                        End Point
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
+              </div>
+              <div className="flex w-full flex-col gap-4">
+                <CardTitle>{awayTeamName}</CardTitle>
+                <Button
+                  onClick={() =>
+                    handleClickAwayTeamAddGoal({
+                      gameId,
+                      pointId: latestPoint.id,
+                    })
+                  }
+                >
+                  Add Goal
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
         </CardContent>
       </Card>
     </div>
