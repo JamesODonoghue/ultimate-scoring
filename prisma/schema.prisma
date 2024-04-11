@@ -58,7 +58,7 @@ model Player {
 
 model Point {
     id          Int           @id @default(autoincrement())
-    game        Game          @relation(fields: [gameId], references: [id])
+    game        Game          @relation(fields: [gameId], references: [id], onDelete: Cascade)
     gameId      Int
     createdAt   DateTime      @default(now())
     updatedAt   DateTime      @updatedAt
@@ -72,7 +72,7 @@ model PointPlayer {
     id        Int    @id @default(autoincrement())
     player    Player @relation(fields: [playerId], references: [id])
     playerId  Int
-    game      Game   @relation(fields: [gameId], references: [id])
+    game      Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
     gameId    Int
     assists   Int?   @default(0)
     goals     Int?   @default(0)
