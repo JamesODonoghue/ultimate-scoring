@@ -14,7 +14,9 @@ import { Input } from "~/components/ui/input";
 import { useFormCustom } from "~/hooks/useForm";
 import {
   addAssist,
+  addBlock,
   addGoal,
+  addTurnover,
   createPlayer,
   createPointPlayer,
   deletePointPlayer,
@@ -41,6 +43,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Plus } from "lucide-react";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: {
@@ -140,6 +143,13 @@ export default function GameStarted({
   }) {
     await incrementAwayTeamScore({ id: gameId });
     await endPoint({ id: pointId, gameId });
+  }
+
+  async function handleClickAddBlock({ id }: { id: number }) {
+    await addBlock({ id });
+  }
+  async function handleClickAddTurnover({ id }: { id: number }) {
+    await addTurnover({ id });
   }
 
   async function handleChangePlayerStat({
@@ -288,16 +298,56 @@ export default function GameStarted({
                   </DrawerTrigger>
                   {listOfPlayers
                     .filter((player) => player.checked)
-                    .map(({ name, id }) => (
-                      <div
-                        className="flex items-center justify-between"
-                        key={id}
-                      >
-                        <div className="flex gap-4">
-                          <div>{name}</div>
-                        </div>
-                      </div>
-                    ))}
+                    .map(({ name, id, pointPlayer }) => {
+                      if (!pointPlayer) {
+                        return <></>;
+                      }
+                      return (
+                        <Card key={id}>
+                          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                            <div>{name}</div>
+                            <div className="my-0 flex items-baseline gap-4">
+                              <Badge variant="secondary">
+                                {pointPlayer.blocks} blocks
+                              </Badge>
+                              <Badge variant="secondary">
+                                {pointPlayer.turnovers} turnovers
+                              </Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="flex items-center justify-end gap-2">
+                              <Button
+                                className="flex gap-2"
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleClickAddBlock({
+                                    id: pointPlayer.id,
+                                  })
+                                }
+                              >
+                                <Plus />
+                                Block
+                              </Button>
+                              <Button
+                                className="flex gap-2"
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  handleClickAddTurnover({
+                                    id: pointPlayer.id,
+                                  })
+                                }
+                              >
+                                <Plus />
+                                Turnover
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
                   <DrawerContent>
                     <DrawerHeader>
                       <DrawerTitle>Add Goal</DrawerTitle>

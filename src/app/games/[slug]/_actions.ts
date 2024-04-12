@@ -123,6 +123,34 @@ export async function deletePointPlayer({ id }: { id: number }) {
   revalidatePath("/player");
 }
 
+export async function addBlock({ id }: { id: number }) {
+  const pointPlayer = await db.pointPlayer.findFirst({
+    where: { id },
+  });
+  if (!pointPlayer) {
+    return;
+  }
+  await db.pointPlayer.update({
+    where: { id },
+    data: { blocks: pointPlayer.blocks ? pointPlayer.blocks + 1 : 1 },
+  });
+  revalidatePath("/pointPlayer");
+}
+
+export async function addTurnover({ id }: { id: number }) {
+  const pointPlayer = await db.pointPlayer.findFirst({
+    where: { id },
+  });
+  if (!pointPlayer) {
+    return;
+  }
+  await db.pointPlayer.update({
+    where: { id },
+    data: { turnovers: pointPlayer.turnovers ? pointPlayer.turnovers + 1 : 1 },
+  });
+  revalidatePath("/pointPlayer");
+}
+
 export async function addAssist({ id }: { id: number }) {
   await db.pointPlayer.update({
     where: { id },
