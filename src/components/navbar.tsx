@@ -16,7 +16,7 @@ export default function Navbar() {
         value={pathname.split("/")[1]}
         className="w-full"
       >
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <Link className="w-full" href="/games">
             <TabsTrigger className="w-full" value="games">
               Games
@@ -25,6 +25,11 @@ export default function Navbar() {
           <Link className="w-full" href="/teams">
             <TabsTrigger className="w-full" value="teams">
               Teams
+            </TabsTrigger>
+          </Link>
+          <Link className="w-full" href="/players">
+            <TabsTrigger className="w-full" value="players">
+              Players
             </TabsTrigger>
           </Link>
         </TabsList>

@@ -35,7 +35,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "~/components/ui/drawer";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { Badge } from "~/components/ui/badge";
@@ -43,7 +42,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Plus } from "lucide-react";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: {
