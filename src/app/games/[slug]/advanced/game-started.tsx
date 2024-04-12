@@ -1,7 +1,7 @@
 "use client";
 import { Button, buttonVariants } from "../../../../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { type Player, type Prisma } from "@prisma/client";
+import { type PointPlayer, type Player, type Prisma } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -40,7 +40,7 @@ import { Badge } from "~/components/ui/badge";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { toast } from "sonner";
+import { useEffect, useState } from "react";
 
 type GameWithTeamsAndPoints = Prisma.GameGetPayload<{
   include: {
@@ -72,41 +72,41 @@ export default function GameStarted({
   });
   const { formState } = form;
   const { isValid } = formState;
+  const [listOfPlayers, setListOfPlayers] = useState<
+    {
+      id: number;
+      name: string;
+      checked: boolean;
+      pointPlayer: PointPlayer | undefined;
+    }[]
+  >([]);
 
   const { formAction: addPlayerFormAction, onSubmit: addPlayerOnSubmit } =
     useFormCustom(createPlayer, null);
   const latestPoint = points.at(-1);
-  if (!latestPoint) {
-    return <div>No point exists</div>;
-  }
-  const { players: currentPointPlayers } = latestPoint;
-  const gamePlayers = players.map((player) => {
-    return {
-      ...player,
-      pointPlayerId: currentPointPlayers.find(
-        (currentPointPlayer) => currentPointPlayer.playerId === player.id,
-      )?.id,
-    };
-  });
-
-  const latestPointPlayers = currentPointPlayers
-    .map((currentPointPlayer) => {
+  useEffect(() => {
+    if (!latestPoint) {
+      return setListOfPlayers([]);
+    }
+    const { players: currentPointPlayers } = latestPoint;
+    const gamePlayers = players.map(({ name, id }) => {
       return {
-        ...currentPointPlayer,
-        gamePlayer: gamePlayers.find(
-          (gamePlayer) => gamePlayer.id === currentPointPlayer.playerId,
+        id,
+        name,
+        pointPlayer: currentPointPlayers.find(
+          (currentPointPlayer) => currentPointPlayer.playerId === id,
         ),
+        checked: !!currentPointPlayers.find(
+          (currentPointPlayer) => currentPointPlayer.playerId === id,
+        )?.id,
       };
-    })
-    .sort((prev, curr) => {
-      if (!prev.gamePlayer) {
-        return -1;
-      }
-      if (!curr.gamePlayer) {
-        return -1;
-      }
-      return prev.gamePlayer.name.localeCompare(curr.gamePlayer.name);
     });
+    setListOfPlayers(gamePlayers);
+  }, [players, latestPoint]);
+
+  if (!latestPoint) {
+    return <div>No active point</div>;
+  }
 
   async function handleChangePlayerCheckbox({
     checked,
@@ -144,21 +144,21 @@ export default function GameStarted({
 
   async function handleChangePlayerStat({
     event,
-    id,
+    pointPlayerId,
     gameId,
   }: {
     event: string;
-    id: number;
+    pointPlayerId: number;
     gameId: number;
   }) {
     if (event === "assist") {
-      return await addAssist({ id });
+      return await addAssist({ id: pointPlayerId });
     }
     if (event === "goal") {
       await incrementHomeTeamScore({ id: gameId });
-      return await addGoal({ id });
+      return await addGoal({ id: pointPlayerId });
     }
-    return await resetPointPlayerStats({ id });
+    return await resetPointPlayerStats({ id: pointPlayerId });
   }
 
   async function handleClickEndPoint({
@@ -172,13 +172,16 @@ export default function GameStarted({
   }
 
   return (
-    <div className=" mx-auto flex max-w-xl flex-col gap-8 p-4">
-      <Link
-        className={buttonVariants({ variant: "ghost" })}
-        href="advanced/stats"
-      >
-        View Game Stats
-      </Link>
+    <div className=" mx-auto flex max-w-xl flex-col gap-4 p-4">
+      <div className="flex w-full justify-end">
+        <Link
+          className={buttonVariants({ variant: "link" })}
+          href="advanced/stats"
+        >
+          View Game Stats
+        </Link>
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle className="flex justify-between text-lg">
@@ -203,25 +206,32 @@ export default function GameStarted({
         </CardHeader>
         <CardContent>
           {latestPoint.status === "READY" ? (
-            <div className="flex flex-col gap-4">
-              <CardTitle>{homeTeamName}</CardTitle>
-              <div>Select players for this point</div>
-              {gamePlayers.map(({ name, id, pointPlayerId }) => (
+            <div className="flex flex-col gap-5">
+              <CardTitle>Select your players for this point</CardTitle>
+              {listOfPlayers.map(({ name, id, checked, pointPlayer }) => (
                 <div className="flex items-center justify-between" key={id}>
                   <div className="flex gap-4">
                     <Checkbox
                       value={id}
                       id={id.toString()}
                       className="flex items-center justify-between"
-                      checked={!!pointPlayerId}
-                      onCheckedChange={(event) =>
-                        handleChangePlayerCheckbox({
+                      checked={checked}
+                      onCheckedChange={async (event) => {
+                        setListOfPlayers(
+                          listOfPlayers.map((player) => {
+                            if (player.id === id) {
+                              return { ...player, checked: !!event };
+                            }
+                            return player;
+                          }),
+                        );
+                        await handleChangePlayerCheckbox({
                           checked: event,
                           id,
                           pointId: latestPoint.id,
-                          pointPlayerId,
-                        })
-                      }
+                          pointPlayerId: pointPlayer?.id,
+                        });
+                      }}
                     />
                     <Label htmlFor={id.toString()}>{name}</Label>
                   </div>
@@ -232,7 +242,6 @@ export default function GameStarted({
                   action={addPlayerFormAction}
                   onSubmit={(event) => {
                     addPlayerOnSubmit(event);
-                    toast("New player added");
                     form.reset();
                   }}
                   className="flex flex-col gap-4"
@@ -277,36 +286,46 @@ export default function GameStarted({
                   >
                     Add Goal
                   </DrawerTrigger>
-                  {latestPointPlayers.map(({ gamePlayer, id }) => (
-                    <div className="flex items-center justify-between" key={id}>
-                      <div className="flex gap-4">
-                        <div>{gamePlayer?.name}</div>
+                  {listOfPlayers
+                    .filter((player) => player.checked)
+                    .map(({ name, id }) => (
+                      <div
+                        className="flex items-center justify-between"
+                        key={id}
+                      >
+                        <div className="flex gap-4">
+                          <div>{name}</div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
                   <DrawerContent>
                     <DrawerHeader>
                       <DrawerTitle>Add Goal</DrawerTitle>
                     </DrawerHeader>
                     <div className="flex flex-col gap-2 p-4">
-                      {latestPointPlayers.map(
-                        ({ gamePlayer, id, assists, goals }) => (
+                      {listOfPlayers
+                        .filter(({ pointPlayer }) => pointPlayer)
+                        .map(({ name, id, pointPlayer }) => (
                           <div
                             className="flex items-center justify-between"
                             key={id}
                           >
                             <div className="flex w-full items-center justify-between gap-4">
-                              <div>{gamePlayer?.name}</div>
+                              <div>{name}</div>
                               <ToggleGroup
                                 className="flex gap-2"
                                 type="single"
                                 defaultValue={
-                                  !!assists ? "assist" : !!goals ? "goal" : ""
+                                  !!pointPlayer?.assists
+                                    ? "assist"
+                                    : !!pointPlayer?.goals
+                                      ? "goal"
+                                      : ""
                                 }
                                 onValueChange={(event) =>
                                   handleChangePlayerStat({
                                     event,
-                                    id,
+                                    pointPlayerId: pointPlayer!.id,
                                     gameId,
                                   })
                                 }
@@ -323,8 +342,7 @@ export default function GameStarted({
                               </ToggleGroup>
                             </div>
                           </div>
-                        ),
-                      )}
+                        ))}
                     </div>
                     <DrawerFooter>
                       <DrawerClose

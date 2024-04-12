@@ -35,29 +35,38 @@ export default async function GameStats({
   });
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-4 p-4">
-      <Link className={buttonVariants({ variant: "ghost" })} href="../advanced">
-        View Game
-      </Link>
-      <Table>
-        <TableCaption>Stats</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Player</TableHead>
-            <TableHead>A</TableHead>
-            <TableHead>G</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {list.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{item.assists}</TableCell>
-              <TableCell>{item.goals}</TableCell>
+      <div className="flex w-full justify-end">
+        <Link
+          className={buttonVariants({ variant: "link" })}
+          href="../advanced"
+        >
+          View Game
+        </Link>
+      </div>
+      {!list.length ? (
+        <div className="flex justify-center">No stats</div>
+      ) : (
+        <Table>
+          <TableCaption>List of player stats</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Player</TableHead>
+              <TableHead>A</TableHead>
+              <TableHead>G</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter></TableFooter>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {list.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.assists}</TableCell>
+                <TableCell>{item.goals}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter></TableFooter>
+        </Table>
+      )}
     </div>
   );
 }
