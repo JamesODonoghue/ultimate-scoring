@@ -193,7 +193,7 @@ export default function GameStarted({
       </div>
 
       <Card>
-        <CardHeader>
+        <CardHeader className="gap-2 space-y-0">
           <CardTitle className="flex justify-between text-lg">
             <div className="flex gap-4">
               <div>{homeTeamName}</div>
@@ -204,11 +204,34 @@ export default function GameStarted({
               <div>{awayTeamScore}</div>
             </div>
           </CardTitle>
-          <div>
+          <div className="flex justify-between">
             {latestPoint.status === "READY" ? (
-              <Badge>Point Ready</Badge>
+              <div>
+                <Badge className="inline-flex">Point Ready</Badge>
+              </div>
             ) : latestPoint.status === "STARTED" ? (
-              <Badge>Point In Progress</Badge>
+              <div>
+                <Badge className="inline-flex">Point In Progress</Badge>
+              </div>
+            ) : (
+              <></>
+            )}
+
+            {latestPoint.status === "STARTED" ? (
+              <Button
+                onClick={() =>
+                  handleClickEndPoint({ id: latestPoint.id, gameId })
+                }
+              >
+                End Point
+              </Button>
+            ) : latestPoint.status === "READY" ? (
+              <Button
+                disabled={latestPoint.players.length !== 5}
+                onClick={() => handleClickStartPoint({ id: latestPoint.id })}
+              >
+                Start Point
+              </Button>
             ) : (
               <></>
             )}
@@ -280,22 +303,17 @@ export default function GameStarted({
                   </Button>
                 </form>
               </Form>
-              <Button
-                onClick={() => handleClickStartPoint({ id: latestPoint.id })}
-              >
-                Start Point
-              </Button>
             </div>
           ) : latestPoint.status === "STARTED" ? (
             <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-4">
                 <Drawer>
                   <CardTitle>{homeTeamName}</CardTitle>
-                  <DrawerTrigger
+                  {/* <DrawerTrigger
                     className={buttonVariants({ variant: "outline" })}
                   >
                     Add Goal
-                  </DrawerTrigger>
+                  </DrawerTrigger> */}
                   {listOfPlayers
                     .filter((player) => player.checked)
                     .map(({ name, id, pointPlayer }) => {
@@ -304,7 +322,7 @@ export default function GameStarted({
                       }
                       return (
                         <Card key={id}>
-                          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                          <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
                             <div>{name}</div>
                             <div className="my-0 flex items-baseline gap-4">
                               <Badge variant="secondary">
@@ -316,33 +334,66 @@ export default function GameStarted({
                             </div>
                           </CardHeader>
                           <CardContent>
-                            <div className="flex items-center justify-end gap-2">
-                              <Button
+                            <div className="flex flex-col gap-2">
+                              <ToggleGroup
                                 className="flex gap-2"
-                                variant="outline"
-                                size="sm"
-                                onClick={() =>
-                                  handleClickAddBlock({
-                                    id: pointPlayer.id,
+                                type="single"
+                                defaultValue={
+                                  !!pointPlayer?.assists
+                                    ? "assist"
+                                    : !!pointPlayer?.goals
+                                      ? "goal"
+                                      : ""
+                                }
+                                onValueChange={(event) =>
+                                  handleChangePlayerStat({
+                                    event,
+                                    pointPlayerId: pointPlayer.id,
+                                    gameId,
                                   })
                                 }
                               >
-                                <Plus />
-                                Block
-                              </Button>
-                              <Button
-                                className="flex gap-2"
-                                variant="outline"
-                                size="sm"
-                                onClick={() =>
-                                  handleClickAddTurnover({
-                                    id: pointPlayer.id,
-                                  })
-                                }
-                              >
-                                <Plus />
-                                Turnover
-                              </Button>
+                                <ToggleGroupItem
+                                  className={`${buttonVariants({
+                                    variant: "outline",
+                                  })} w-full`}
+                                  value="assist"
+                                >
+                                  Assist
+                                </ToggleGroupItem>
+                                <ToggleGroupItem
+                                  className={`${buttonVariants({
+                                    variant: "outline",
+                                  })} w-full`}
+                                  value="goal"
+                                >
+                                  Goal
+                                </ToggleGroupItem>
+                              </ToggleGroup>
+                              <div className="flex gap-2">
+                                <Button
+                                  className="flex w-full gap-2"
+                                  variant="outline"
+                                  onClick={() =>
+                                    handleClickAddBlock({
+                                      id: pointPlayer.id,
+                                    })
+                                  }
+                                >
+                                  Block
+                                </Button>
+                                <Button
+                                  className="flex w-full gap-2"
+                                  variant="outline"
+                                  onClick={() =>
+                                    handleClickAddTurnover({
+                                      id: pointPlayer.id,
+                                    })
+                                  }
+                                >
+                                  Turnover
+                                </Button>
+                              </div>
                             </div>
                           </CardContent>
                         </Card>
