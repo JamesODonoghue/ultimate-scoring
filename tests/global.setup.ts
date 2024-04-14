@@ -90,7 +90,6 @@ setup("Setup Auth", async ({ page }) => {
       wdw.Clerk.session?.expireAt &&
       wdw.Clerk.session.expireAt > new Date()
     ) {
-      console.log("session is still valid");
       return true;
     }
 

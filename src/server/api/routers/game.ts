@@ -38,7 +38,6 @@ export const gameRouter = createTRPCRouter({
       });
     }),
   getAll: publicProcedure.query(({ ctx }) => {
-    console.log("get all");
     return ctx.db.game.findMany();
   }),
   getById: publicProcedure
