@@ -17,11 +17,14 @@ export async function createGame(formData: {
   if (!awayTeamId) {
     throw new Error("Home team must be defined");
   }
+  if (!user) {
+    throw new Error("User must be defined");
+  }
   const { id } = await db.game.create({
     data: {
       homeTeamId: parseInt(homeTeamId),
       awayTeamId: parseInt(awayTeamId),
-      createdBy: user?.id,
+      createdBy: user.id,
     },
   });
   revalidatePath("games");

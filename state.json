@@ -1,0 +1,104 @@
+{
+  "cookies": [
+    {
+      "name": "__clerk_db_jwt",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkdmJfMmY2RTd0MDNFUEFPbW5ROW5ienlVQnNycER4In0.SMglhAZjGfYcsNVuHXki-76XgbWJGzhXI5eLonfgliF51CGk91EgqOBmGsKWa9ZOjhnM77lrqIOxL4XyN3y4IALitl7bPTMfMzABNvJMwDfcnv95Nk_t_H9sJsyOBXWDEWq_oYDaxui4isOKQosoU91dYSoBqlwMWdETX2a-4WKq1agM8rcvVUBm8PQkWLpXhm2FC0_lxnFFiBeTkOIhaBVs_cqm4p7ETIF4rNtoRJm5XVumKA6hMpzh2OJF3LlMvIYG7KTl9mD0JjoCNpa72f2a3PU4KTLoDDVyhkkU2Dif5Y5b7DZbc4bpToDxjSJShH1_i9ueFeenwX0Y3358Ag",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1744648962,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "LwoRMnUPnkS3D6_mdaZMrC1zn2BUDEszTWn7Ls6KQaw-1713112962-1.0.1.1-QArtBzzbzoYCy1DeTo8Mb3d_vfKgPiM1Gpl54bHKe5QBillEBiNd8uguPeWVGV6MbKaWW4b3nhWR1Zflhfa5cw",
+      "domain": ".sunny-mouse-31.clerk.accounts.dev",
+      "path": "/",
+      "expires": 1713114762.577094,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_cfuvid",
+      "value": "iU1h6nh0GXX_.NwY6IPgSOF67rBjmK_u07qvYMsYIqM-1713112962577-0.0.1.1-604800000",
+      "domain": ".sunny-mouse-31.clerk.accounts.dev",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__client_uat",
+      "value": "0",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1744648962,
+      "httpOnly": false,
+      "secure": false,
+      "sameSite": "Strict"
+    },
+    {
+      "name": "__cf_bm",
+      "value": "LPbusvh_6mmSiyks5v2_iHcqeIrcMQWp9sLSWRR9p4k-1713112962-1.0.1.1-lZ0tKNXdIAP_B0VXMDNlRnpoNmAbyLsvL5nCt85SlrVzg5RRbnRxiqNSynFxjlymVE8.vTOp0G7JMYIUx8x.YA",
+      "domain": ".sunny-mouse-31.accounts.dev",
+      "path": "/",
+      "expires": 1713114762.97941,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "_cfuvid",
+      "value": "XWe3wjJoqYmCOzl_OqelfPOgMPoMbBDkFFcxQTZQsA0-1713112962922-0.0.1.1-604800000",
+      "domain": ".sunny-mouse-31.accounts.dev",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "__clerk_db_jwt",
+      "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkdmJfMmY2RTd0MDNFUEFPbW5ROW5ienlVQnNycER4IiwiaWQiOiJjbGllbnRfMmY2RTdwSnlxaGJvSFA0akxheUhjUE9FU1NNIiwicm90YXRpbmdfdG9rZW4iOiIwejU4cjRhcmNoZG1hbTRqdGlsYXlkejV5d3p6dzF5MXV5ZjVkdnN3In0.FiK9YxBK3kxIIdfp1LJTVENqHBzQA9ghw3qVyPPyrWw3nLD_VlaxSYqKzYxDQm9dSmrpsG7M9A-yWWWAfts_HdodzWMijUpwafTHIsd8JmnA7NGZhYfiluXaSCKFzfyI_SF3z3cTrqp58pWUw5lPuAXvn1WMB8MU2ji2x1lHiqXyynK3YCdnp_xCKKMttVGEmyqDjibzphHkAD6ixFn89xi6WgEI1U8setb2n6yWuJ2nX1zRA-ydtVoWz5pYyxV-SpO8lgq4ZaG0V6bA6AmUrFeaXQ_BFutk13ipFjKLRn36Pn2PfQ_uEeHxuOykaPEjX9hFpZPiqF5NG-yZG4CADg",
+      "domain": "sunny-mouse-31.accounts.dev",
+      "path": "/",
+      "expires": 1744648963,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__session",
+      "value": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18yY1c4WUtxNXVrMXQ2N2JRZHFPWFU5bGZRR3ciLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwczovL3N1bm55LW1vdXNlLTMxLmFjY291bnRzLmRldiIsImV4cCI6MTcxMzExMzAyMywiaWF0IjoxNzEzMTEyOTYzLCJpc3MiOiJodHRwczovL3N1bm55LW1vdXNlLTMxLmNsZXJrLmFjY291bnRzLmRldiIsIm5iZiI6MTcxMzExMjk1Mywic2lkIjoic2Vzc18yZjZFN3FKQTZraTMyeGp3cmFSODJWVm15YkgiLCJzdWIiOiJ1c2VyXzJmNkJJU0QyMnVNcUpvYkxLc3ltN0JUNkxDeCJ9.jOuLq4PtS9I7cYa2KtOO5qoijvWI5xCTgjydQIN0La6JJilMotNwMTvWWef-QMduuSms2mSjZJ5UxUCX7c7eqtJ3qCCyRNM3sG_zbDVjjM5dBemVaRYkX-GtLqIhzUi13rBV34BhmGcF_6csUP67uQ4Lde3JTSFt7CsxA3D2SuVzyTLpgMF7QK0iyRnbX0U4e_fk_Y1bNSnFop5U7-L1U3owaG7juKr5W5w2VFT3dOCgNPLNIR4aid694y9BSrNZNL_hzhD-0dGNI0QCTlYf4GdBoImoaLURG_DHRSQElU5bXV_GdanobU4NCufzgQrHIqVM-5dASXXhCiKwk7_t_w",
+      "domain": "sunny-mouse-31.accounts.dev",
+      "path": "/",
+      "expires": 1744648963,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://sunny-mouse-31.accounts.dev",
+      "localStorage": [
+        {
+          "name": "clerk-db-jwt",
+          "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkdmJfMmY2RTd0MDNFUEFPbW5ROW5ienlVQnNycER4IiwiaWQiOiJjbGllbnRfMmY2RTdwSnlxaGJvSFA0akxheUhjUE9FU1NNIiwicm90YXRpbmdfdG9rZW4iOiIwejU4cjRhcmNoZG1hbTRqdGlsYXlkejV5d3p6dzF5MXV5ZjVkdnN3In0.FiK9YxBK3kxIIdfp1LJTVENqHBzQA9ghw3qVyPPyrWw3nLD_VlaxSYqKzYxDQm9dSmrpsG7M9A-yWWWAfts_HdodzWMijUpwafTHIsd8JmnA7NGZhYfiluXaSCKFzfyI_SF3z3cTrqp58pWUw5lPuAXvn1WMB8MU2ji2x1lHiqXyynK3YCdnp_xCKKMttVGEmyqDjibzphHkAD6ixFn89xi6WgEI1U8setb2n6yWuJ2nX1zRA-ydtVoWz5pYyxV-SpO8lgq4ZaG0V6bA6AmUrFeaXQ_BFutk13ipFjKLRn36Pn2PfQ_uEeHxuOykaPEjX9hFpZPiqF5NG-yZG4CADg"
+        }
+      ]
+    },
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "clerk-db-jwt",
+          "value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkZXYiOiJkdmJfMmY2RTd0MDNFUEFPbW5ROW5ienlVQnNycER4In0.SMglhAZjGfYcsNVuHXki-76XgbWJGzhXI5eLonfgliF51CGk91EgqOBmGsKWa9ZOjhnM77lrqIOxL4XyN3y4IALitl7bPTMfMzABNvJMwDfcnv95Nk_t_H9sJsyOBXWDEWq_oYDaxui4isOKQosoU91dYSoBqlwMWdETX2a-4WKq1agM8rcvVUBm8PQkWLpXhm2FC0_lxnFFiBeTkOIhaBVs_cqm4p7ETIF4rNtoRJm5XVumKA6hMpzh2OJF3LlMvIYG7KTl9mD0JjoCNpa72f2a3PU4KTLoDDVyhkkU2Dif5Y5b7DZbc4bpToDxjSJShH1_i9ueFeenwX0Y3358Ag"
+        }
+      ]
+    }
+  ]
+}
