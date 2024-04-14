@@ -20,6 +20,9 @@ jobs:
           echo DATABASE_URL=${{ secrets.DATABASE_URL }} >> .env
           echo NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY }} >> .env
           echo CLERK_SECRET_KEY=${{ secrets.CLERK_SECRET_KEY }} >> .env
+          echo PLAYWRIGHT_E2E_USER_ID=${{ secrets.PLAYWRIGHT_E2E_USER_ID }} >> .env
+          echo PLAYWRIGHT_E2E_USER_EMAIL=${{ secrets.PLAYWRIGHT_E2E_USER_EMAIL }} >> .env
+          echo PLAYWRIGHT_E2E_USER_PASSWORD=${{ secrets.PLAYWRIGHT_E2E_USER_PASSWORD }} >> .env
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers

@@ -37,12 +37,15 @@ export default defineConfig({
   // },
   projects: [
     {
-      name: "setup db",
-      testMatch: /global\.setup\.ts/,
+      name: "setup",
+      testMatch: /.*setup\.ts/,
     },
     {
       name: "main with db",
-      dependencies: ["setup db"],
+      dependencies: ["setup"],
+      use: {
+        storageState: "state.json",
+      },
     },
   ],
 });
