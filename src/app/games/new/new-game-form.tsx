@@ -28,7 +28,6 @@ const formSchema = z.object({
   awayTeamId: z.string(),
 });
 export default function NewGameForm({ teams }: { teams: Team[] }) {
-  console.log(teams);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
