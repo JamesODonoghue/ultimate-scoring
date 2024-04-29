@@ -202,7 +202,6 @@ export default function GameStarted({
               <div>{awayTeamScore}</div>
             </div>
           </CardTitle>
-          {latestPoint.status}
           <div className="flex justify-between">
             {latestPoint.status === "READY" ? (
               <div>
