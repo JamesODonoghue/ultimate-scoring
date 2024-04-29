@@ -84,20 +84,23 @@ export async function deletePlayer(id: number) {
 }
 
 export async function startPoint(id: number) {
-  await db.point.update({
+  const res = await db.point.update({
     where: { id },
     data: { status: "STARTED" },
   });
+  console.log("updating point to started", res.id);
   revalidatePath("/game");
 }
 export async function endPoint({ id, gameId }: { id: number; gameId: number }) {
-  await db.point.update({
+  const completedPoint = await db.point.update({
     where: { id },
     data: { status: "COMPLETED" },
   });
-  await db.point.create({
+  console.log("updated point to completed", completedPoint.id);
+  const res = await db.point.create({
     data: { gameId },
   });
+  console.log("creating new point", res.id);
   revalidatePath("/game");
 }
 
