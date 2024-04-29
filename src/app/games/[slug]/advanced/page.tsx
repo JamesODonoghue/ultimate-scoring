@@ -7,7 +7,7 @@ export default async function Game({ params }: { params: { slug: string } }) {
     include: {
       homeTeam: true,
       awayTeam: true,
-      points: { include: { players: true } },
+      points: { include: { players: true }, orderBy: { createdAt: "asc" } },
     },
   });
   if (!response) {

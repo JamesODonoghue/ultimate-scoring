@@ -225,7 +225,7 @@ export default function GameStarted({
               </Button>
             ) : latestPoint.status === "READY" ? (
               <Button
-                disabled={latestPoint.players.length !== 5}
+                disabled={latestPoint.players.length !== 1}
                 onClick={() => handleClickStartPoint({ id: latestPoint.id })}
               >
                 Start Point
