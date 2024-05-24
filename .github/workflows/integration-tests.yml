@@ -7,13 +7,13 @@ jobs:
       db_url: ${{ steps.create-branch.outputs.db_url }}
     steps:
       - uses: neondatabase/create-branch-action@v5
+        id: create-branch
         with:
           project_id: delicate-sun-09202381
           database: jamesdb
           branch_name: from_action_reusable
           username: postgres
           api_key: ${{ secrets.NEON_API_KEY }}
-          id: create-branch
   integration_tests:
     needs: create_db_branch
     name: Run integration tests
