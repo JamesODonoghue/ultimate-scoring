@@ -15,7 +15,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { User } from "@clerk/nextjs/server";
 
 export default function GameCard({
   id,

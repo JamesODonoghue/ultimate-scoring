@@ -39,7 +39,7 @@ setup("create new database", async () => {
 
 type ClerkType = typeof Clerk;
 
-const authFile = "state.json";
+const authFile = "auth.json";
 
 setup("Setup Auth", async ({ page }) => {
   await page.goto("/");

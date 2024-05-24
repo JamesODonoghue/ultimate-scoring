@@ -3,6 +3,7 @@ import GameCard from "./games-list";
 import { buttonVariants } from "~/components/ui/button";
 import Link from "next/link";
 import { clerkClient } from "@clerk/nextjs/server";
+export const dynamic = 'force-dynamic'
 export default async function Games() {
   const games = await db.game.findMany({
     include: { homeTeam: true, awayTeam: true },
