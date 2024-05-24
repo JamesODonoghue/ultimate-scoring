@@ -1,8 +1,5 @@
 name: Integration Tests
-on:
-  pull_request:
-    branches: [main, master]
-    types: [opened, edited]
+on: pull_request
 jobs:
   create_db_branch:
     runs-on: ubuntu-latest
