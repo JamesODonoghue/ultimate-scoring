@@ -1,8 +1,7 @@
 name: Migrate
 on:
-  pull_request:
-    types:
-      - opened
+  push:
+    branches: [main, master]
 jobs:
   migrate:
     environment: production
