@@ -5,6 +5,7 @@ on:
     types: [opened, edited]
 jobs:
   create_db_branch:
+    runs-on: ubuntu-latest
     outputs:
       db_url: ${{ steps.create-branch.outputs.db_url }}
     steps:
