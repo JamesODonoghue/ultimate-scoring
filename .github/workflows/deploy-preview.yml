@@ -12,8 +12,8 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     outputs:
-      db_url: steps.create-branch.outputs.db_url
-      preview_url: steps.deploy.outputs.preview_url
+      db_url: ${{ steps.create-branch.outputs.db_url }}
+      preview_url: ${{ steps.deploy.outputs.preview_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -76,7 +76,7 @@ jobs:
       - name: create env file
         run: |
           touch .env
-          echo DATABASE_URL=${{ needs.deploy-preview.outputs.db_url }} >> .env
+          echo DATABASE_URL=${{ needs.deploy-preview.outputs.db_url }}?sslmode=require >> .env
           echo PREVIEW_URL=${{ needs.deploy-preview.outputs.preview_url }} >> .env
       - name: Run tests
         run: npm run test
