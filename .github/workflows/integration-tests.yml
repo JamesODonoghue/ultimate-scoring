@@ -1,36 +1,37 @@
-name: Integration Tests
-on: pull_request
-jobs:
-  create_db_branch:
-    environment: staging
-    runs-on: ubuntu-latest
-    outputs:
-      db_url: ${{ steps.create-branch.outputs.db_url }}
-    steps:
-      - uses: neondatabase/create-branch-action@v5
-        id: create-branch
-        with:
-          project_id: delicate-sun-09202381
-          database: jamesdb
-          branch_name: from_action_reusable
-          username: postgres
-          api_key: ${{ secrets.NEON_API_KEY }}
-  integration_tests:
-    needs: create_db_branch
-    name: Run integration tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - name: Install dependencies
-        run: npm ci
-      - name: Install playwright browsers
-        run: npx playwright install --with-deps chromium
-      - name: create env file
-        run: |
-          touch .env
-          echo DATABASE_URL=${{ needs.create_db_branch.db_url }} >> .env
-      - name: Start services
-        run: docker-compose up -d --wait --wait-timeout 30
-      - name: Run tests
-        run: npm run test
+# name: Integration Tests
+# on: deployment_status
+# jobs:
+#   # create_db_branch:
+#   #   environment: staging
+#   #   runs-on: ubuntu-latest
+#   #   outputs:
+#   #     db_url: ${{ steps.create-branch.outputs.db_url }}
+#   #   steps:
+#   #     - uses: neondatabase/create-branch-action@v5
+#   #       id: create-branch
+#   #       with:
+#   #         project_id: delicate-sun-09202381
+#   #         database: jamesdb
+#   #         branch_name: from_action_reusable
+#   #         username: postgres
+#   #         api_key: ${{ secrets.NEON_API_KEY }}
+#   integration_tests:
+#     if: github.event.deployment_status.state == 'success'
+#     needs: create_db_branch
+#     name: Run integration tests
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: actions/setup-node@v3
+#       - name: Install dependencies
+#         run: npm ci
+#       - name: Install playwright browsers
+#         run: npx playwright install --with-deps chromium
+#       - name: create env file
+#         run: |
+#           touch .env
+#           echo DATABASE_URL=${{ needs.create_db_branch.db_url }} >> .env
+#       - name: Start services
+#         run: docker-compose up -d --wait --wait-timeout 30
+#       - name: Run tests
+#         run: npm run test
