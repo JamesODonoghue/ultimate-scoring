@@ -23,7 +23,6 @@ jobs:
         uses: neondatabase/create-branch-action@v5
         with:
           project_id: ${{ env.NEON_PROJECT_ID }}
-          # parent: dev # optional (defaults to your primary branch)
           branch_name: preview/pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }}
           database: jamesdb
           username: ${{ env.NEON_DATABASE_USERNAME }}
@@ -56,7 +55,6 @@ jobs:
       - name: Comment on Pull Request
         uses: thollander/actions-comment-pull-request@v2
         with:
-          # GITHUB_TOKEN: ${{ env.GH_TOKEN }}
           message: |
             Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
             Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
@@ -73,23 +71,3 @@ jobs:
           echo PREVIEW_URL=${{steps.deploy.outputs.preview_url}} >> .env
       - name: Run tests
         run: npm run test
-
-  # integration_tests:
-  #   # if: github.event.deployment_status.state == 'success'
-  #   needs: deploy-preview
-  #   name: Run integration tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #     - name: Install dependencies
-  #       run: npm ci
-  #     - name: Install playwright browsers
-  #       run: npx playwright install --with-deps chromium
-  #     - name: create env file
-  #       run: |
-  #         touch .env
-  #         echo DATABASE_URL=${{needs.deploy-preview.outputs.db_url}}?sslmode=require >> .env
-  #         echo PREVIEW_URL=${{needs.deploy-preview.outputs.preview_url}} >> .env
-  #     - name: Run tests
-  #       run: npm run test
