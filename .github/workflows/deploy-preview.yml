@@ -80,7 +80,7 @@ jobs:
         run: |
           touch .env
           echo DATABASE_URL=${{steps.create-branch.outputs.db_url}}?sslmode=require >> .env
-          echo PREVIEW_URL=https://ultimate-scoring-fot3unnan-jamesodonoghues-projects.vercel.app >> .env
+          echo PREVIEW_URL=${{steps.deploy.outputs.preview_url}} >> .env
           echo PLAYWRIGHT_E2E_USER_EMAIL=${{secrets.PLAYWRIGHT_E2E_USER_EMAIL}} >> .env
           echo PLAYWRIGHT_E2E_USER_PASSWORD=${{secrets.PLAYWRIGHT_E2E_USER_PASSWORD}} >> .env
       - name: Run tests
