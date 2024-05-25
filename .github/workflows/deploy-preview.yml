@@ -12,7 +12,6 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     outputs:
-      db_url: ${{ steps.create-branch.outputs.db_url }}
       preview_url: ${{ steps.deploy.outputs.preview_url }}
     steps:
       - uses: actions/checkout@v4
@@ -32,8 +31,16 @@ jobs:
           username: ${{ env.NEON_DATABASE_USERNAME }}
           api_key: ${{ env.NEON_API_KEY }}
 
+      - name: Mask secrets
+        run: |
+          MASKED_URL=${{ steps.create-branch.outputs.db_url}}
+          echo "::add-mask::$MASKED_URL"
+          echo "::set-output name=db_url::$MASKED_URL"
+
       # - name: Run Migrations
       #   run: |
+      #     echo ${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> "$GITHUB_ENV"
+
       #     touch .env
 
       #     echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
@@ -76,8 +83,7 @@ jobs:
       - name: create env file
         run: |
           touch .env
-          echo DATABASE_URL_UNPOOLED=${{needs.deploy-preview.outputs.db_url}}?sslmode=require >> .env
-          echo DATABASE_URL=${{needs.deploy-preview.outputs.db_url_with_pooler}}?sslmode=require >> .env
+          echo DATABASE_URL=${{needs.deploy-preview.outputs.db_url}}?sslmode=require >> .env
           echo PREVIEW_URL=${{needs.deploy-preview.outputs.preview_url}} >> .env
       # - name: Run tests
       #   run: npm run test
