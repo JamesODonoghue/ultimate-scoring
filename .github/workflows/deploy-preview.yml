@@ -63,7 +63,7 @@ jobs:
             Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
   integration_tests:
     # if: github.event.deployment_status.state == 'success'
-    needs: deploy
+    needs: deploy-preview
     name: Run integration tests
     runs-on: ubuntu-latest
     steps:
@@ -76,7 +76,7 @@ jobs:
       - name: create env file
         run: |
           touch .env
-          echo DATABASE_URL=${{ needs.deploy_preview.outputs.db_url }} >> .env
-          echo PREVIEW_URL=${{ needs.deploy_preview.outputs.preview_url }} >> .env
+          echo DATABASE_URL=${{ needs.deploy-preview.outputs.db_url }} >> .env
+          echo PREVIEW_URL=${{ needs.deploy-preview.outputs.preview_url }} >> .env
       - name: Run tests
         run: npm run test
