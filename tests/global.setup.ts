@@ -1,4 +1,4 @@
-import { test as setup } from "@playwright/test";
+import { test as setup, expect } from "@playwright/test";
 import { db } from "~/server/db";
 import dotenv from "dotenv";
 dotenv.config();
@@ -46,5 +46,6 @@ setup("Clerk", async ({ page }) => {
     .getByRole("textbox", { name: /password/i })
     .fill(process.env.PLAYWRIGHT_E2E_USER_PASSWORD ?? "");
   await page.getByRole("button", { name: /^continue$/i }).click();
+  await expect(page.getByText(/ulti score/i)).toBeVisible();
   await page.context().storageState({ path: authFile });
 });
