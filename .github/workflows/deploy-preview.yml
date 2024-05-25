@@ -23,20 +23,20 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-      # - uses: actions/checkout@v4
-      # - name: Get branch name
-      #   id: branch-name
-      #   uses: tj-actions/branch-names@v8
+      - uses: actions/checkout@v4
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v8
 
-      # - name: Create Neon Branch
-      #   id: create-branch
-      #   uses: neondatabase/create-branch-action@v5
-      #   with:
-      #     project_id: ${{ env.NEON_PROJECT_ID }}
-      #     branch_name: preview/pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }}
-      #     database: jamesdb
-      #     username: ${{ env.NEON_DATABASE_USERNAME }}
-      #     api_key: ${{ env.NEON_API_KEY }}
+      - name: Create Neon Branch
+        id: create-branch
+        uses: neondatabase/create-branch-action@v5
+        with:
+          project_id: ${{ env.NEON_PROJECT_ID }}
+          branch_name: preview/pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }}
+          database: jamesdb
+          username: ${{ env.NEON_DATABASE_USERNAME }}
+          api_key: ${{ env.NEON_API_KEY }}
 
       # - name: Run Migrations
       #   run: |
