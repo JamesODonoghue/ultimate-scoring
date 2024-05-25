@@ -1,4 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 /**
  * Read environment variables from file.
@@ -42,7 +45,6 @@ export default defineConfig({
     },
     {
       name: "main with db",
-      dependencies: ["setup"],
       use: {
         storageState: "auth.json",
       },
