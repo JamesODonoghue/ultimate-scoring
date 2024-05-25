@@ -70,6 +70,8 @@ jobs:
             Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
 
       - uses: actions/setup-node@v4
+        with:
+          cache: "npm"
       - name: Install dependencies
         run: npm ci
       - name: Install playwright browsers
