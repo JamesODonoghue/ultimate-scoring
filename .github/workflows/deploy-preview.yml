@@ -76,8 +76,8 @@ jobs:
       - name: create env file
         run: |
           touch .env
-          echo DATABASE_URL_UNPOOLED=${{ needs.deploy-preview.outputs.db_url }}?sslmode=require >> .env
-          echo DATABASE_URL=${{ needs.deploy-preview.outputs.db_url_with_pooler }}?sslmode=require >> .env
-          echo PREVIEW_URL=${{ needs.deploy-preview.outputs.preview_url }} >> .env
+          echo DATABASE_URL_UNPOOLED=${{needs.deploy-preview.outputs.db_url}}?sslmode=require >> .env
+          echo DATABASE_URL=${{needs.deploy-preview.outputs.db_url_with_pooler}}?sslmode=require >> .env
+          echo PREVIEW_URL=${{needs.deploy-preview.outputs.preview_url}} >> .env
       # - name: Run tests
       #   run: npm run test
