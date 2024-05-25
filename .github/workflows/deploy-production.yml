@@ -8,7 +8,7 @@ on:
 env:
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  DIRECT_URL: ${{ secrets.DIRECT_URL }}
+  DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
 
 jobs:
   deploy-production:
