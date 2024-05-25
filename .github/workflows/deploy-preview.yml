@@ -12,7 +12,7 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     outputs:
-      db_url: ${{ steps.create-branch.outputs.db_url }}
+      db_url: ${{ steps.create-branch.outputs.db_url_with_pooler }}
       preview_url: ${{ steps.deploy.outputs.preview_url }}
     steps:
       - uses: actions/checkout@v4
