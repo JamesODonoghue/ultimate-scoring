@@ -11,8 +11,6 @@ jobs:
   deploy-preview:
     permissions: write-all
     runs-on: ubuntu-latest
-    outputs:
-      preview_url: ${{ steps.deploy.outputs.preview_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,59 +29,67 @@ jobs:
           username: ${{ env.NEON_DATABASE_USERNAME }}
           api_key: ${{ env.NEON_API_KEY }}
 
-      - name: Mask secrets
+      - name: Run Migrations
         run: |
-          MASKED_URL=${{ steps.create-branch.outputs.db_url}}
-          echo "::add-mask::$MASKED_URL"
-          echo "::set-output name=db_url::$MASKED_URL"
+          echo ${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> "$GITHUB_ENV"
 
-      # - name: Run Migrations
-      #   run: |
-      #     echo ${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> "$GITHUB_ENV"
+          touch .env
 
-      #     touch .env
+          echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
+          echo DATABASE_URL_UNPOOLED=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
 
-      #     echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
-      #     echo DATABASE_URL_UNPOOLED=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
+          npx prisma generate
+          npx prisma migrate deploy
 
-      #     npx prisma generate
-      #     npx prisma migrate deploy
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
 
-      # - name: Install Vercel CLI
-      #   run: npm install --global vercel@latest
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
 
-      # - name: Pull Vercel Environment Information
-      #   run: vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }}
+      - name: Build Project Artifacts
+        run: vercel build --token=${{ env.VERCEL_TOKEN }}
 
-      # - name: Build Project Artifacts
-      #   run: vercel build --token=${{ env.VERCEL_TOKEN }}
+      - name: Deploy Preview to Vercel
+        id: deploy
+        run: echo preview_url=$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}) >> $GITHUB_OUTPUT
+      - name: Comment on Pull Request
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          # GITHUB_TOKEN: ${{ env.GH_TOKEN }}
+          message: |
+            Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
+            Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
 
-      # - name: Deploy Preview to Vercel
-      #   id: deploy
-      #   run: echo preview_url=$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }}) >> $GITHUB_OUTPUT
-      # - name: Comment on Pull Request
-      #   uses: thollander/actions-comment-pull-request@v2
-      #   with:
-      #     # GITHUB_TOKEN: ${{ env.GH_TOKEN }}
-      #     message: |
-      #       Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
-      #       Neon branch :elephant: : https://console.neon.tech/app/projects/${{ env.NEON_PROJECT_ID }}/branches/${{ steps.create-branch.outputs.branch_id }}
-  integration_tests:
-    # if: github.event.deployment_status.state == 'success'
-    needs: deploy-preview
-    name: Run integration tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      # - name: Install dependencies
-      #   run: npm ci
-      # - name: Install playwright browsers
-      #   run: npx playwright install --with-deps chromium
+      - uses: actions/setup-node@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Install playwright browsers
+        run: npx playwright install --with-deps chromium
       - name: create env file
         run: |
           touch .env
-          echo DATABASE_URL=${{needs.deploy-preview.outputs.db_url}}?sslmode=require >> .env
-          echo PREVIEW_URL=${{needs.deploy-preview.outputs.preview_url}} >> .env
-      # - name: Run tests
-      #   run: npm run test
+          echo DATABASE_URL=${{steps.create-branch.outputs.db_url}}?sslmode=require >> .env
+          echo PREVIEW_URL=${{steps.deploy.outputs.preview_url}} >> .env
+      - name: Run tests
+        run: npm run test
+
+  # integration_tests:
+  #   # if: github.event.deployment_status.state == 'success'
+  #   needs: deploy-preview
+  #   name: Run integration tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #     - name: Install dependencies
+  #       run: npm ci
+  #     - name: Install playwright browsers
+  #       run: npx playwright install --with-deps chromium
+  #     - name: create env file
+  #       run: |
+  #         touch .env
+  #         echo DATABASE_URL=${{needs.deploy-preview.outputs.db_url}}?sslmode=require >> .env
+  #         echo PREVIEW_URL=${{needs.deploy-preview.outputs.preview_url}} >> .env
+  #     - name: Run tests
+  #       run: npm run test
