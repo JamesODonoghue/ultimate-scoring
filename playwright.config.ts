@@ -1,4 +1,4 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -45,6 +45,7 @@ export default defineConfig({
     },
     {
       name: "main with db",
+      dependencies: ['setup'],
       use: {
         storageState: "auth.json",
       },

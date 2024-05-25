@@ -4,7 +4,8 @@
 import { test as setup } from "@playwright/test";
 import { db } from "~/server/db";
 import type Clerk from "@clerk/clerk-js";
-
+import dotenv from 'dotenv'
+dotenv.config()
 setup("create new database", async () => {
   console.log("seeding database...");
   await db.pointPlayer.deleteMany();
@@ -41,7 +42,18 @@ type ClerkType = typeof Clerk;
 
 const authFile = "auth.json";
 
-setup("Setup Auth", async ({ page }) => {
+
+setup('Clerk', async ({page}) => {
+  await page.goto('/')
+  await page.getByRole('textbox', {name: /email address/i}).fill(process.env.PLAYWRIGHT_E2E_USER_EMAIL ?? '')
+  await page.getByRole('button', {name: /^continue$/i}).click()
+  await page.getByRole('textbox', {name: /password/i}).fill(process.env.PLAYWRIGHT_E2E_USER_PASSWORD ?? '')
+  await page.getByRole('button', {name: /^continue$/i}).click()
+  await page.context().storageState({ path: authFile });
+
+})
+
+setup.skip("Setup Auth", async ({ page }) => {
   await page.goto("/");
   // await expect(page.getByText(/ulti score/i)).toBeVisible();
 
