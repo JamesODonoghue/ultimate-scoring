@@ -1,7 +1,6 @@
 import { defineConfig } from "@playwright/test";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
-
 
 /**
  * Read environment variables from file.
@@ -31,6 +30,7 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+    video: "on-first-retry",
   },
   /* Run your local dev server before starting the tests */
   // webServer: {
@@ -45,7 +45,7 @@ export default defineConfig({
     },
     {
       name: "main with db",
-      dependencies: ['setup'],
+      dependencies: ["setup"],
       use: {
         storageState: "auth.json",
       },
