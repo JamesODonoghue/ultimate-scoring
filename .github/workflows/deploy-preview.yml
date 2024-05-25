@@ -69,10 +69,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
-      - name: Install dependencies
-        run: npm ci
-      - name: Install playwright browsers
-        run: npx playwright install --with-deps chromium
+      # - name: Install dependencies
+      #   run: npm ci
+      # - name: Install playwright browsers
+      #   run: npx playwright install --with-deps chromium
       - name: create env file
         run: |
           touch .env
