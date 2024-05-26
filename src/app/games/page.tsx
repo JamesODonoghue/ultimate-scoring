@@ -1,26 +1,25 @@
-import { db } from "~/server/db";
+"use client";
 import GameCard from "./games-list";
 import { buttonVariants } from "~/components/ui/button";
 import Link from "next/link";
-import { clerkClient } from "@clerk/nextjs/server";
-export const dynamic = 'force-dynamic'
-export default async function Games() {
-  const games = await db.game.findMany({
-    include: { homeTeam: true, awayTeam: true },
-    orderBy: [{ createdAt: "desc" }],
-  });
-
-  const users = await clerkClient.users.getUserList();
-  const gamesWithUsers = games.map((game) => {
-    const user = users.find((user) => user.id === game.createdBy);
-    if (!user) {
-      return { ...game, createdBy: "" };
-    }
-    return {
-      ...game,
-      createdBy: user.lastName ? `${user.firstName} ${user.lastName}` : ``,
-    };
-  });
+import { api } from "~/trpc/react";
+import { Skeleton } from "~/components/ui/skeleton";
+export const dynamic = "force-dynamic";
+export default function Games() {
+  const { data: games, isError } = api.game.getAll.useQuery();
+  if (isError) {
+    return <div>Error fetching games</div>;
+  }
+  if (!games) {
+    return (
+      <div className="mx-auto flex max-w-xl flex-col gap-4 p-4">
+        <div className="flex justify-end">
+          <Skeleton className="h-12 w-36" />
+        </div>
+        <Skeleton className="h-24 w-full" />
+      </div>
+    );
+  }
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-8 p-4">
       <div className="flex justify-end">
@@ -31,21 +30,15 @@ export default async function Games() {
           Create Game
         </Link>
       </div>
-      {!gamesWithUsers.length && (
-        <div className="flex justify-center">No games created</div>
-      )}
-      {gamesWithUsers.map(
-        ({ id, homeTeam, awayTeam, createdAt, createdBy }) => (
-          <GameCard
-            key={id}
-            id={id}
-            homeTeam={homeTeam}
-            awayTeam={awayTeam}
-            createdAt={createdAt}
-            createdBy={createdBy}
-          />
-        ),
-      )}
+      {games.map(({ id, homeTeam, awayTeam, createdAt }) => (
+        <GameCard
+          key={id}
+          id={id}
+          homeTeam={homeTeam}
+          awayTeam={awayTeam}
+          createdAt={createdAt}
+        />
+      ))}
     </div>
   );
 }

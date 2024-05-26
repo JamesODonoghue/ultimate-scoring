@@ -38,7 +38,9 @@ export const gameRouter = createTRPCRouter({
       });
     }),
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.game.findMany();
+    return ctx.db.game.findMany({
+      include: { homeTeam: true, awayTeam: true },
+    });
   }),
   getById: publicProcedure
     .input(z.object({ id: z.string() }))
