@@ -21,13 +21,11 @@ export default function GameCard({
   homeTeam,
   awayTeam,
   createdAt,
-  createdBy,
 }: {
   id: number;
   homeTeam: { id: number; name: string };
   awayTeam: { id: number; name: string };
   createdAt: Date;
-  createdBy: string;
 }) {
   async function handleClickDelete(id: number) {
     await deleteGame({ id });
@@ -38,7 +36,6 @@ export default function GameCard({
         <CardTitle>
           {homeTeam.name} vs {awayTeam.name}
         </CardTitle>
-        <CardDescription>{createdBy}</CardDescription>
         <CardDescription>
           {createdAt.toLocaleString("en-us", {
             timeZone: "America/Los_Angeles",
